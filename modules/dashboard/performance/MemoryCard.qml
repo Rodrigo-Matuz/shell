@@ -11,7 +11,7 @@ import qs.utils
 StyledRect {
     id: root
 
-    readonly property color accent: Colours.palette.m3tertiary
+    readonly property color accent: Colours.accents.yellow
 
     color: Colours.tPalette.m3surfaceContainer
     radius: Tokens.rounding.medium

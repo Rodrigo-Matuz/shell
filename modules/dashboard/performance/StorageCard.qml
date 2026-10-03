@@ -12,7 +12,7 @@ import qs.utils
 StyledRect {
     id: root
 
-    readonly property color accent: Colours.palette.m3secondary
+    readonly property color accent: Colours.accents.orange
     readonly property real percentage: Storage.primaryDisk?.perc ?? 0
 
     color: Colours.tPalette.m3surfaceContainer

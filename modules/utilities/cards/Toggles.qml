@@ -83,6 +83,8 @@ StyledRect {
                     roleValue: "wifi"
                     delegate: Toggle {
                         icon: "wifi"
+                        activeColour: Colours.accents.blue
+                        activeOnColour: "#FFFFFF"
                         checked: Nmcli.wifiEnabled
                         onClicked: Nmcli.toggleWifi()
                     }
@@ -91,6 +93,8 @@ StyledRect {
                     roleValue: "bluetooth"
                     delegate: Toggle {
                         icon: "bluetooth"
+                        activeColour: Colours.accents.purple
+                        activeOnColour: "#FFFFFF"
                         checked: Bluetooth.defaultAdapter?.enabled ?? false // qmllint disable unresolved-type
                         onClicked: {
                             const adapter = Bluetooth.defaultAdapter; // qmllint disable unresolved-type
@@ -103,6 +107,8 @@ StyledRect {
                     roleValue: "mic"
                     delegate: Toggle {
                         icon: "mic"
+                        activeColour: Colours.accents.green
+                        activeOnColour: "#050505"
                         checked: !Audio.sourceMuted
                         onClicked: {
                             const audio = Audio.source?.audio;
@@ -115,7 +121,7 @@ StyledRect {
                     roleValue: "settings"
                     delegate: Toggle {
                         icon: "settings"
-                        inactiveOnColour: Colours.palette.m3onSurfaceVariant
+                        inactiveOnColour: Colours.accents.orange
                         isToggle: false
                         onClicked: {
                             root.screenState.utilities = false;
@@ -127,6 +133,8 @@ StyledRect {
                     roleValue: "gameMode"
                     delegate: Toggle {
                         icon: "gamepad"
+                        activeColour: Colours.accents.purple
+                        activeOnColour: "#FFFFFF"
                         checked: GameMode.enabled
                         onClicked: GameMode.enabled = !GameMode.enabled
                     }
@@ -135,6 +143,8 @@ StyledRect {
                     roleValue: "dnd"
                     delegate: Toggle {
                         icon: "notifications_off"
+                        activeColour: Colours.accents.red
+                        activeOnColour: "#050505"
                         checked: Notifs.dnd
                         onClicked: Notifs.dnd = !Notifs.dnd
                     }
@@ -143,6 +153,8 @@ StyledRect {
                     roleValue: "vpn"
                     delegate: Toggle {
                         icon: "vpn_key"
+                        activeColour: Colours.accents.yellow
+                        activeOnColour: "#050505"
                         checked: VPN.connected && VPN.status.state !== "needs-auth" && VPN.status.state !== "error"
                         enabled: !VPN.connecting && !VPN.disconnecting
                         isToggle: VPN.status.state !== "needs-auth" && VPN.status.state !== "error"

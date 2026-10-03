@@ -33,7 +33,7 @@ StyledRect {
 
             MaterialIcon {
                 text: "swap_vert"
-                color: Colours.palette.m3primary
+                color: Colours.accents.blue
                 fontStyle: Tokens.font.icon.medium
             }
 
@@ -58,10 +58,10 @@ StyledRect {
 
                 anchors.fill: parent
                 line1: NetworkUsage.uploadBuffer // qmllint disable missing-type
-                line1Color: Colours.palette.m3secondary
+                line1Color: Colours.accents.red
                 line1FillAlpha: 0.15
                 line2: NetworkUsage.downloadBuffer // qmllint disable missing-type
-                line2Color: Colours.palette.m3tertiary
+                line2Color: Colours.accents.blue
                 line2FillAlpha: 0.2
                 maxValue: smoothMax
                 historyLength: NetworkUsage.historyLength
@@ -108,7 +108,7 @@ StyledRect {
 
             MaterialIcon {
                 text: "download"
-                color: Colours.palette.m3tertiary
+                color: Colours.accents.blue
                 fontStyle: Tokens.font.icon.medium
             }
 
@@ -125,7 +125,7 @@ StyledRect {
             StyledText {
                 text: Units.formatBytes(NetworkUsage.downloadSpeed ?? 0, true)
                 font: Tokens.font.body.builders.medium.weight(Font.Medium).build()
-                color: Colours.palette.m3tertiary
+                color: Colours.accents.blue
             }
         }
 
@@ -136,7 +136,7 @@ StyledRect {
 
             MaterialIcon {
                 text: "upload"
-                color: Colours.palette.m3secondary
+                color: Colours.accents.red
                 fontStyle: Tokens.font.icon.medium
             }
 
@@ -153,7 +153,7 @@ StyledRect {
             StyledText {
                 text: Units.formatBytes(NetworkUsage.uploadSpeed ?? 0, true)
                 font: Tokens.font.body.builders.medium.weight(Font.Medium).build()
-                color: Colours.palette.m3secondary
+                color: Colours.accents.red
             }
         }
 

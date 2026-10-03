@@ -23,6 +23,8 @@ Singleton {
     readonly property M3Palette current: M3Palette {}
     readonly property M3Palette preview: M3Palette {}
     readonly property Transparency transparency: Transparency {}
+    // Fixed accent roles are intentionally independent of the wallpaper and scheme preview.
+    readonly property AccentPalette accents: AccentPalette {}
     readonly property alias wallLuminance: analyser.luminance
 
     property bool cooldownPending
@@ -164,6 +166,15 @@ Singleton {
                 cAnimCompleteTimer.start();
             root.lastBaseTransparency = base;
         }
+    }
+
+    component AccentPalette: QtObject {
+        readonly property color red: "#FC1A70"
+        readonly property color purple: "#702EF3"
+        readonly property color blue: "#1E65FF"
+        readonly property color orange: "#FF4D00"
+        readonly property color yellow: "#FFFF87"
+        readonly property color green: "#A4E400"
     }
 
     component M3TPalette: QtObject {

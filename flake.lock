@@ -8,15 +8,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1790397057,
-        "narHash": "sha256-vlub2V4edRngqU8yO44o7gi92j3jQXCcK+FtV7JROAg=",
-        "owner": "caelestia-dots",
+        "lastModified": 1791029918,
+        "narHash": "sha256-yc6srz0/wubpEW2ap+WvOYf76lQ3FImNgZpbdXVG/aU=",
+        "owner": "Rodrigo-Matuz",
         "repo": "cli",
-        "rev": "bf37620d8ff4d99bbb244e592206d27d7bbe2d1f",
+        "rev": "df120cd99e29cb3183e21eaeca69daadbcf242da",
         "type": "github"
       },
       "original": {
-        "owner": "caelestia-dots",
+        "owner": "Rodrigo-Matuz",
         "repo": "cli",
         "type": "github"
       }
