@@ -40,7 +40,7 @@ StyledRect {
 
             sourceComponent: MaterialIcon {
                 text: "calendar_month"
-                color: root.colour
+                color: Colours.accents.green
             }
         }
 
@@ -57,14 +57,14 @@ StyledRect {
                     Layout.alignment: Qt.AlignHCenter
                     text: Time.format("ddd")
                     font: Tokens.font.body.builders.small.scale(0.9).build()
-                    color: root.colour
+                    color: Colours.accents.green
                 }
 
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
                     text: Time.format("d")
                     font: root.font.scale(1.1).build()
-                    color: root.colour
+                    color: Colours.accents.green
                 }
 
                 StyledRect {

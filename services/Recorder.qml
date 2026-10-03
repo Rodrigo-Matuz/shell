@@ -7,100 +7,111 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    readonly property alias running: props.running
-    readonly property alias paused: props.paused
-    readonly property alias elapsed: props.elapsed
+    property bool running: false
+    property bool paused: false
+    property real elapsed: 0
+    property bool available: false
+    property bool pending: false
+    property string statusError: ""
+    property string commandError: ""
+    readonly property string error: root.commandError || root.statusError
     property int refCount: 0
-    property bool needsStart
-    property list<string> startArgs
-    property bool needsStop
-    property bool needsPause
+    property bool refreshAfterCommand: false
+    property bool commandFinished: false
 
-    function start(extraArgs = []): void {
-        needsStart = true;
-        startArgs = extraArgs;
-        checkProc.running = true;
+    function refresh(): void {
+        if (!statusProc.running && !commandProc.running)
+            statusProc.running = true;
+    }
+
+    function request(flag: string): void {
+        if (root.pending || !root.available)
+            return;
+        root.pending = true;
+        root.commandFinished = false;
+        root.commandError = "";
+        commandProc.exec(["caelestia", "record", "--obs", flag]);
+    }
+
+    function start(): void {
+        if (!root.running)
+            root.request("--start");
     }
 
     function stop(): void {
-        needsStop = true;
-        checkProc.running = true;
+        if (root.running)
+            root.request("--stop");
     }
 
     function togglePause(): void {
-        needsPause = true;
-        checkProc.running = true;
-    }
-
-    PersistentProperties {
-        id: props
-
-        property bool running: false
-        property bool paused: false
-        property real elapsed: 0 // Might get too large for int
-
-        reloadableId: "recorder"
+        if (root.running)
+            root.request("--pause");
     }
 
     Process {
-        id: checkProc
+        id: statusProc
 
         running: true
-        command: ["pidof", "gpu-screen-recorder"]
-        onExited: code => { // qmllint disable signal-handler-parameters
-            const running = code === 0;
-
-            if (running && root.needsStop) {
-                commandProc.exec(["caelestia", "record"]);
-                props.running = false;
-                props.paused = false;
-            } else if (running && root.needsPause) {
-                commandProc.exec(["caelestia", "record", "-p"]);
-                props.paused = !props.paused;
-            } else if (!running && root.needsStart) {
-                commandProc.exec(["caelestia", "record", ...root.startArgs]);
-                props.running = true;
-                props.paused = false;
-                props.elapsed = 0;
-            } else if (running !== props.running && !commandProc.running) {
-                // The recording was started/stopped outside the shell (e.g. via
-                // keybind), or our command finished without reaching the optimistic state
-                props.running = running;
-                props.paused = false;
-                props.elapsed = 0;
+        command: ["caelestia", "record", "--obs", "--status"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                // An in-flight poll from before the action must not briefly
+                // replace the state we are waiting to reconcile.
+                if (root.pending && (!root.commandFinished || root.refreshAfterCommand))
+                    return;
+                try {
+                    const status = JSON.parse(text);
+                    root.available = !!status.available;
+                    root.running = root.available && !!status.running;
+                    root.paused = root.running && !!status.paused;
+                    root.elapsed = root.running ? (status.elapsed ?? 0) : 0;
+                    root.statusError = root.available ? "" : (status.error ?? "OBS WebSocket unavailable");
+                } catch (e) {
+                    root.available = false;
+                    root.running = false;
+                    root.paused = false;
+                    root.elapsed = 0;
+                    root.statusError = "Unable to read OBS recording status";
+                }
             }
-
-            root.needsStart = false;
-            root.needsStop = false;
-            root.needsPause = false;
+        }
+        onExited: code => { // qmllint disable signal-handler-parameters
+            if (code !== 0 && !root.statusError && !(root.pending && (!root.commandFinished || root.refreshAfterCommand))) {
+                root.available = false;
+                root.running = false;
+                root.paused = false;
+                root.statusError = "Unable to read OBS recording status";
+            }
+            if (root.refreshAfterCommand && root.pending && root.commandFinished) {
+                root.refreshAfterCommand = false;
+                Qt.callLater(() => root.refresh());
+            } else if (root.pending && root.commandFinished)
+                root.pending = false;
         }
     }
 
     Process {
         id: commandProc
 
-        // The command owns the transition: `caelestia record` blocks on slurp for
-        // region captures, and waits for the recorder to finalise the file when
-        // stopping. Reconcile once it has actually finished.
-        onExited: checkProc.running = true // qmllint disable signal-handler-parameters
+        onExited: code => { // qmllint disable signal-handler-parameters
+            root.commandFinished = true;
+            if (code !== 0)
+                root.commandError = "OBS recording command failed; check WebSocket settings";
+            if (statusProc.running)
+                root.refreshAfterCommand = true;
+            else
+                root.refresh();
+        }
     }
 
-    // Only poll while something is showing the state, i.e. the utilities drawer is open
+    // Reconcile with OBS while the utilities drawer is visible. Never infer
+    // recording status merely from whether the OBS process exists.
     Timer {
         interval: 1000
         running: root.refCount > 0
         repeat: true
         triggeredOnStart: true
 
-        onTriggered: checkProc.running = true
-    }
-
-    Connections {
-        function onSecondsChanged(): void {
-            props.elapsed++;
-        }
-
-        enabled: props.running && !props.paused
-        target: Time // qmllint disable incompatible-type
+        onTriggered: root.refresh()
     }
 }

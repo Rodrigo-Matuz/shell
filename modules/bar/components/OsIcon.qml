@@ -32,6 +32,8 @@ Item {
         Logo {
             implicitWidth: Math.round(Tokens.font.body.large.pointSize * 1.6)
             implicitHeight: Math.round(Tokens.font.body.large.pointSize * 1.6)
+            topColour: Colours.accents.blue
+            bottomColour: Colours.accents.blue
         }
     }
 
@@ -41,7 +43,7 @@ Item {
         ColouredIcon {
             source: SysInfo.osLogo
             implicitSize: Math.round(Tokens.font.body.large.pointSize * 1.2)
-            colour: Colours.palette.m3tertiary
+            colour: Colours.accents.blue
         }
     }
 }

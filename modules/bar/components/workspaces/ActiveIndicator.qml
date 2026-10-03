@@ -12,6 +12,7 @@ StyledRect {
 
     required property Workspace activeWs
     required property Item mask
+    property color accent: Colours.accents.blue
     property alias contentColour: colouriser.colorizationColor
 
     property real start
@@ -43,7 +44,7 @@ StyledRect {
     y: start + mask.y
     implicitHeight: end - start
     radius: Tokens.rounding.full
-    color: Colours.accents.blue
+    color: root.accent
 
     Anim on start {
         id: startAnim
@@ -70,7 +71,7 @@ StyledRect {
 
         source: root.mask
         sourceColor: Colours.palette.m3onSurface
-        colorizationColor: "#FFFFFF"
+        colorizationColor: Qt.colorEqual(root.accent, Colours.accents.purple) || Qt.colorEqual(root.accent, Colours.accents.blue) ? "#FFFFFF" : "#050505"
 
         x: 0
         y: -parent.start

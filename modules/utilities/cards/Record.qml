@@ -9,6 +9,7 @@ import qs.components
 import qs.components.controls
 import qs.components.misc
 import qs.services
+import qs.utils
 
 StyledRect {
     id: root
@@ -72,7 +73,7 @@ StyledRect {
 
                 StyledText {
                     Layout.fillWidth: true
-                    text: Recorder.paused ? Tr.trCtx("Paused", "recorder state") : Recorder.running ? Tr.trCtx("Running...", "recorder state") : Tr.trCtx("Ready", "recorder state")
+                    text: Recorder.error || (!Recorder.available ? Tr.tr("OBS WebSocket unavailable") : Recorder.paused ? Tr.trCtx("Paused", "recorder state") : Recorder.running ? Tr.trCtx("Running...", "recorder state") : Tr.trCtx("Ready in OBS", "recorder state"))
                     color: Colours.palette.m3onSurfaceVariant
                     font: Tokens.font.body.small
                     elide: Text.ElideRight
@@ -80,38 +81,10 @@ StyledRect {
                 }
             }
 
-            SplitButton {
-                disabled: Recorder.running
-
-                active: menuItems.find(m => root.props.recordingMode === m.icon + m.text) ?? menuItems[0]
-                menu.onItemSelected: item => root.props.recordingMode = item.icon + item.text
-
-                menuItems: [
-                    MenuItem {
-                        icon: "fullscreen"
-                        text: Tr.tr("Record fullscreen")
-                        activeText: Tr.trCtx("Fullscreen", "recording mode")
-                        onClicked: Recorder.start()
-                    },
-                    MenuItem {
-                        icon: "screenshot_region"
-                        text: Tr.tr("Record region")
-                        activeText: Tr.trCtx("Region", "recording mode")
-                        onClicked: Recorder.start(["-r"])
-                    },
-                    MenuItem {
-                        icon: "select_to_speak"
-                        text: Tr.tr("Record fullscreen with sound")
-                        activeText: Tr.trCtx("Fullscreen", "recording mode")
-                        onClicked: Recorder.start(["-s"])
-                    },
-                    MenuItem {
-                        icon: "volume_up"
-                        text: Tr.tr("Record region with sound")
-                        activeText: Tr.trCtx("Region", "recording mode")
-                        onClicked: Recorder.start(["-sr"])
-                    }
-                ]
+            TextButton {
+                text: Tr.tr("Record in OBS")
+                disabled: !Recorder.available || Recorder.pending || Recorder.running
+                onClicked: Recorder.start()
             }
         }
 
@@ -174,9 +147,33 @@ StyledRect {
     Component {
         id: recordingList
 
-        RecordingList {
-            props: root.props
-            screenState: root.screenState
+        ColumnLayout {
+            spacing: Tokens.spacing.small
+
+            StyledText {
+                Layout.fillWidth: true
+                text: Tr.tr("Recordings in your Videos folder (set OBS's output folder to match)")
+                color: Colours.palette.m3onSurfaceVariant
+                font: Tokens.font.body.small
+                wrapMode: Text.Wrap
+            }
+
+            RecordingList {
+                Layout.fillWidth: true
+                props: root.props
+                screenState: root.screenState
+            }
+
+            RecordingList {
+                Layout.fillWidth: true
+                props: root.props
+                screenState: root.screenState
+                directory: `${Paths.videos}/Recordings`
+                title: Tr.tr("Previous Caelestia recordings")
+                formats: ["recording_*.mp4"]
+                showWhenEmpty: false
+                allowDelete: true
+            }
         }
     }
 
@@ -255,16 +252,14 @@ StyledRect {
                 IconButton {
                     shapeMorph: true
                     isRound: true
+                    disabled: Recorder.pending
                     label.animate: true
                     icon: Recorder.paused ? "play_arrow" : "pause"
-                    isToggle: true
+                    isToggle: false
                     checked: Recorder.paused
                     type: IconButton.Tonal
                     font: Tokens.font.icon.medium
-                    onClicked: {
-                        Recorder.togglePause();
-                        internalChecked = Recorder.paused;
-                    }
+                    onClicked: Recorder.togglePause()
 
                     implicitWidth: {
                         // Ensure even size so icon is centered properly
@@ -278,6 +273,7 @@ StyledRect {
                 IconButton {
                     shapeMorph: true
                     isRound: true
+                    disabled: Recorder.pending
                     icon: "stop"
                     inactiveColour: Colours.palette.m3error
                     inactiveOnColour: Colours.palette.m3onError

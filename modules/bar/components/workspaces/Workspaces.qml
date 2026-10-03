@@ -21,6 +21,24 @@ StyledClippingRect {
     readonly property int activeWsId: monitor.activeWorkspace?.id ?? 1
     readonly property int activeWsIdx: workspaceIndex(activeWsId)
     readonly property int shown: Math.max(1, Config.bar.workspaces.shown)
+    readonly property var accentChoices: [Colours.accents.red, Colours.accents.purple, Colours.accents.blue, Colours.accents.orange, Colours.accents.yellow, Colours.accents.green]
+    property int lastWsId: -1
+    property int previousAccentIndex: 2
+    property color activeAccent: Colours.accents.blue
+
+    // Choose only on actual workspace transitions, never in a colour binding.
+    onActiveWsIdChanged: {
+        if (root.lastWsId < 0 || root.lastWsId === root.activeWsId)
+            return;
+        const count = root.accentChoices.length;
+        let index = Math.floor(Math.random() * (count - 1));
+        if (index >= root.previousAccentIndex)
+            index++;
+        root.previousAccentIndex = index;
+        root.activeAccent = root.accentChoices[index];
+        root.lastWsId = root.activeWsId;
+    }
+    Component.onCompleted: root.lastWsId = root.activeWsId
 
     readonly property var wsIds: {
         if (Config.bar.workspaces.showUnoccupied)
@@ -161,6 +179,7 @@ StyledClippingRect {
             active: Config.bar.workspaces.activeIndicator
 
             sourceComponent: ActiveIndicator {
+                accent: root.activeAccent
                 activeWs: {
                     workspaces.itemsDirty;
                     return workspaces.itemAtIndex(root.activeWsIdx) as Workspace;

@@ -18,6 +18,13 @@ ColumnLayout {
 
     required property var props
     required property ScreenState screenState
+    property string directory: Paths.recsdir
+    property string title: Tr.tr("Recordings")
+    property var formats: ["*.mp4", "*.mkv", "*.mov", "*.flv", "*.ts", "*.webm"]
+    property bool allowDelete: false
+    property bool showWhenEmpty: true
+
+    visible: showWhenEmpty || list.count > 0
 
     spacing: 0
 
@@ -39,7 +46,7 @@ ColumnLayout {
             StyledText {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.fillWidth: true
-                text: Tr.tr("Recordings")
+                text: root.title
                 font: Tokens.font.body.medium
             }
 
@@ -56,8 +63,8 @@ ColumnLayout {
         id: list
 
         model: FileSystemModel {
-            path: Paths.recsdir
-            nameFilters: ["recording_*.mp4"]
+            path: root.directory
+            nameFilters: root.formats
             sortReverse: true
         }
 
@@ -122,6 +129,7 @@ ColumnLayout {
             IconButton {
                 icon: "delete_forever"
                 type: IconButton.Text
+                visible: root.allowDelete
                 label.color: Colours.palette.m3error
                 stateLayer.color: Colours.palette.m3error
                 onClicked: root.props.recordingConfirmDelete = recording.modelData.path
