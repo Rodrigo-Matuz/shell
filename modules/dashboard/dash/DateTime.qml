@@ -31,7 +31,7 @@ Item {
         StyledText {
             Layout.alignment: Qt.AlignHCenter
             text: "•••"
-            color: Colours.light ? Colours.palette.m3primary : Colours.accents.red
+            color: Colours.light ? Colours.palette.m3primary : Colours.accents.purple
             font: Tokens.font.clock.size(28 * 0.9).build()
         }
 
@@ -52,7 +52,7 @@ Item {
 
             sourceComponent: StyledText {
                 text: "•••"
-                color: Colours.light ? Colours.palette.m3primary : Colours.accents.red
+                color: Colours.light ? Colours.palette.m3primary : Colours.accents.purple
                 font: Tokens.font.clock.size(28 * 0.9).build()
             }
         }

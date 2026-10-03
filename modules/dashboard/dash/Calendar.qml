@@ -168,7 +168,7 @@ CustomMouseArea {
                 horizontalAlignment: Text.AlignHCenter
                 text: model.shortName
                 font: Tokens.font.body.builders.small.weight(Font.Medium).build()
-                color: (model.day === 0 || model.day === 6) ? (Colours.light ? Colours.palette.m3tertiary : Colours.accents.orange) : Colours.palette.m3onSurface
+                color: model.day === 7 ? (Colours.light ? Colours.palette.m3error : Colours.accents.red) : model.day === 6 ? (Colours.light ? Colours.palette.m3primary : Colours.accents.purple) : Colours.palette.m3onSurface
             }
         }
 
@@ -208,9 +208,14 @@ CustomMouseArea {
                         horizontalAlignment: Text.AlignHCenter
                         text: grid.locale.toString(dayItem.model.day)
                         color: {
+                            if (dayItem.model.month !== grid.month)
+                                return Qt.alpha(Colours.palette.m3onSurfaceVariant, dayItem.model.today ? 0.4 : 1);
+
                             const dayOfWeek = dayItem.model.date.getDay();
-                            if (dayOfWeek === 0 || dayOfWeek === 6)
-                                return Colours.light ? Colours.palette.m3tertiary : Colours.accents.orange;
+                            if (dayOfWeek === 0)
+                                return Colours.light ? Colours.palette.m3error : Colours.accents.red;
+                            if (dayOfWeek === 6)
+                                return Colours.light ? Colours.palette.m3primary : Colours.accents.purple;
 
                             return Colours.palette.m3onSurfaceVariant;
                         }
@@ -223,7 +228,7 @@ CustomMouseArea {
             MaterialShape {
                 id: todayIndicator
 
-                readonly property Item todayItem: grid.contentItem.children.find(c => c.model.today) ?? null
+                readonly property Item todayItem: grid.contentItem.children.find(c => c.model.today && c.model.month === grid.month) ?? null
                 property Item today
 
                 onTodayItemChanged: {

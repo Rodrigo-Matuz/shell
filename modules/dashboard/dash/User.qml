@@ -108,7 +108,7 @@ Item {
                     anchors.centerIn: parent
                     implicitSize: parent.height * 0.7
                     shape: MaterialShape.Diamond
-                    color: Colours.palette.m3primary
+                    color: Colours.light ? Colours.palette.m3primary : Colours.accents.red
                     scale: mouse.pressed ? 0.9 : mouse.containsMouse ? 1 : 0.7
 
                     Behavior on color {
@@ -124,7 +124,7 @@ Item {
                     MaterialIcon {
                         anchors.centerIn: parent
                         text: "person_edit"
-                        color: Colours.palette.m3onPrimary
+                        color: Colours.light ? Colours.palette.m3onPrimary : Colours.on(Colours.accents.red)
                         fontStyle: Tokens.font.icon.large
                     }
                 }
@@ -158,7 +158,7 @@ Item {
 
             source: SysInfo.osLogo
             implicitSize: Tokens.sizes.dashboard.logoSize
-            colour: Colours.palette.m3onPrimaryContainer
+            colour: Colours.light ? Colours.palette.m3onPrimaryContainer : Colours.accents.blue
         }
     }
 
@@ -168,7 +168,7 @@ Item {
         Logo {
             implicitWidth: Tokens.sizes.dashboard.logoSize
             implicitHeight: Tokens.sizes.dashboard.logoSize
-            topColour: Colours.palette.m3primary
+            topColour: Colours.light ? Colours.palette.m3primary : Colours.accents.blue
             bottomColour: Colours.palette.m3onPrimaryContainer
         }
     }
@@ -258,7 +258,7 @@ Item {
 
                 anchors.verticalCenter: parent.verticalCenter
                 text: "select_window"
-                color: Colours.palette.m3onSecondaryContainer
+                color: Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.purple
                 fontStyle: wmText.font
             }
 
@@ -268,7 +268,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: Math.round(fontInfo.pointSize * 0.1)
                 text: SysInfo.wm + "..."
-                color: Colours.palette.m3onSecondaryContainer
+                color: Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.purple
                 font: Tokens.font.body.builders.small.vaxis("slnt", -4).build()
                 width: Math.min(implicitWidth, Tokens.sizes.dashboard.userWidth - wmContainer.x - Tokens.padding.medium * 2 - wmIcon.implicitWidth - wmLabel.spacing - Tokens.padding.extraLarge)
                 elide: Text.ElideRight

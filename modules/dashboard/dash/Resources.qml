@@ -44,7 +44,8 @@ Item {
         Resource {
             icon: "memory_alt"
             value: Memory.percentage
-            fgColour: Colours.light ? Colours.palette.m3tertiary : Colours.accents.yellow
+            fgColour: Colours.light ? Colours.palette.m3tertiary : Colours.accents.orange
+            iconColour: Colours.light ? Colours.palette.m3primary : Colours.accents.yellow
         }
 
         Resource {
@@ -57,6 +58,7 @@ Item {
         id: res
 
         required property string icon
+        property color iconColour: fgColour
 
         Layout.fillHeight: true
         implicitSize: height
@@ -70,7 +72,7 @@ Item {
             anchors.centerIn: parent
             text: res.icon
             font: Tokens.font.icon.large
-            color: res.fgColour
+            color: res.iconColour
         }
     }
 }

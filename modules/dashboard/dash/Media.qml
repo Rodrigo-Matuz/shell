@@ -50,6 +50,7 @@ Item {
         implicitSize: cover.width + root.arcCoverGap + thickness * 2
 
         fgColour: Colours.light ? Colours.palette.m3primary : Colours.accents.red
+        bgColour: Colours.light ? Colours.palette.m3secondaryContainer : Colours.accents.purple
         strokeWidth: Tokens.sizes.dashboard.mediaProgressThickness
         startAngle: -90 - sweepAngle / 2
         sweepAngle: Tokens.sizes.dashboard.mediaProgressSweep
@@ -115,7 +116,7 @@ Item {
         animate: true
         horizontalAlignment: Text.AlignHCenter
         text: (Players.active?.trackArtist ?? Tr.tr("No media")) || Tr.tr("Unknown artist")
-        color: Colours.palette.m3secondary
+        color: Colours.light ? Colours.palette.m3secondary : Colours.accents.purple
 
         width: parent.implicitWidth - Tokens.padding.extraLargeIncreased
         elide: Text.ElideRight
@@ -146,6 +147,10 @@ Item {
             icon: Players.active?.isPlaying ? "pause" : "play_arrow"
             isRound: true
             shapeMorph: true
+            activeColour: Colours.light ? Colours.palette.m3primary : Colours.accents.purple
+            inactiveColour: Colours.light ? Colours.palette.m3primary : Colours.accents.purple
+            activeOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.onPurple
+            inactiveOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.onPurple
             checked: Players.active?.isPlaying ?? false
             disabled: !Players.active?.canTogglePlaying
             onClicked: Players.active?.togglePlaying()

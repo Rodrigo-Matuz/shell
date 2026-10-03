@@ -23,7 +23,7 @@ Item {
         if (Colours.light)
             return Colours.palette.m3primary;
         switch (iconName) {
-        case "dashboard": return Colours.accents.yellow;
+        case "dashboard": return Colours.accents.purple;
         case "queue_music": return Colours.accents.red;
         case "speed": return Colours.accents.orange;
         case "cloud": return Colours.accents.blue;

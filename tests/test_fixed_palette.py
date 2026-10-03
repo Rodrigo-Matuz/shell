@@ -22,19 +22,19 @@ class PaletteTest(unittest.TestCase):
 
     def test_dashboard_tabs_use_semantic_fixed_accents(self):
         tabs = (ROOT / "modules/dashboard/Tabs.qml").read_text()
-        for role in ("yellow", "red", "orange", "blue"):
+        for role in ("purple", "red", "orange", "blue"):
             self.assertIn(f"Colours.accents.{role}", tabs)
         self.assertIn('root.accentForTab(bar.currentItem?.iconName ?? "")', tabs)
         self.assertIn("Colours.palette.m3onSurface : Colours.palette.m3onSurfaceVariant", tabs)
 
     def test_dashboard_home_spreads_accents(self):
         expected = {
-            "DateTime.qml": ("red", "yellow"),
-            "Calendar.qml": ("yellow", "orange"),
+            "DateTime.qml": ("purple", "yellow"),
+            "Calendar.qml": ("yellow", "red", "purple"),
             "SmallWeather.qml": ("blue", "yellow"),
-            "User.qml": ("green",),
-            "Media.qml": ("red", "yellow"),
-            "Resources.qml": ("blue", "yellow", "green"),
+            "User.qml": ("blue", "red", "purple", "green"),
+            "Media.qml": ("red", "yellow", "purple"),
+            "Resources.qml": ("blue", "orange", "yellow", "green"),
         }
         for file, roles in expected.items():
             with self.subTest(file=file):
