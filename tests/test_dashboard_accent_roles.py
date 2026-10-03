@@ -68,9 +68,13 @@ class DashboardAccentRolesTest(unittest.TestCase):
         self.assertIn('Colours.accents.purple', media)
         self.assertIn('activeColour: Colours.light ? Colours.palette.m3primary : Colours.accents.purple', media)
         self.assertIn('inactiveColour: Colours.light ? Colours.palette.m3primary : Colours.accents.purple', media)
-        self.assertIn('readonly property color onPurple: "#FFFFFF"', (DASH.parents[1] / "services/Colours.qml").read_text())
-        self.assertIn('activeOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.onPurple', media)
-        self.assertIn('inactiveOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.onPurple', media)
+        self.assertIn('readonly property color purpleForeground: "#FFFFFF"', (DASH.parents[1] / "services/Colours.qml").read_text())
+        self.assertIn('activeOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.purpleForeground', media)
+        self.assertIn('inactiveOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.purpleForeground', media)
+
+    def test_accent_property_names_cannot_be_qml_on_signal_handlers(self):
+        colours = (DASH.parents[1] / "services/Colours.qml").read_text()
+        self.assertNotRegex(colours, r'property\s+color\s+on[A-Z]')
 
 
 if __name__ == '__main__':

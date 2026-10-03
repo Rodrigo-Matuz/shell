@@ -171,7 +171,7 @@ Singleton {
     component AccentPalette: QtObject {
         readonly property color red: "#FC1A70"
         readonly property color purple: "#702EF3"
-        readonly property color onPurple: "#FFFFFF"
+        readonly property color purpleForeground: "#FFFFFF"
         readonly property color blue: "#1E65FF"
         readonly property color orange: "#FF4D00"
         readonly property color yellow: "#FFFF87"

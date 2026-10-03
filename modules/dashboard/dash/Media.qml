@@ -149,8 +149,8 @@ Item {
             shapeMorph: true
             activeColour: Colours.light ? Colours.palette.m3primary : Colours.accents.purple
             inactiveColour: Colours.light ? Colours.palette.m3primary : Colours.accents.purple
-            activeOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.onPurple
-            inactiveOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.onPurple
+            activeOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.purpleForeground
+            inactiveOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.purpleForeground
             checked: Players.active?.isPlaying ?? false
             disabled: !Players.active?.canTogglePlaying
             onClicked: Players.active?.togglePlaying()
