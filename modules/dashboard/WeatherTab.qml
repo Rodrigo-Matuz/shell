@@ -53,14 +53,14 @@ Item {
                     icon: "wb_twilight"
                     label: Tr.tr("Sunrise")
                     value: Weather.sunrise
-                    colour: Colours.palette.m3tertiary
+                    colour: Colours.light ? Colours.palette.m3tertiary : Colours.accents.yellow
                 }
 
                 WeatherStat {
                     icon: "bedtime"
                     label: Tr.tr("Sunset")
                     value: Weather.sunset
-                    colour: Colours.palette.m3tertiary
+                    colour: Colours.light ? Colours.palette.m3tertiary : Colours.accents.red
                 }
             }
         }
@@ -93,7 +93,7 @@ Item {
                     StyledText {
                         text: Weather.temp
                         font: Tokens.font.body.builders.large.size(28 * 2).weight(Font.Medium).build()
-                        color: Colours.palette.m3primary
+                        color: Colours.light ? Colours.palette.m3primary : Colours.accents.orange
                     }
 
                     StyledText {
@@ -114,19 +114,19 @@ Item {
                 icon: "water_drop"
                 label: Tr.tr("Humidity")
                 value: Strings.percent(Weather.humidity)
-                colour: Colours.palette.m3secondary
+                colour: Colours.light ? Colours.palette.m3secondary : Colours.accents.blue
             }
             DetailCard {
                 icon: "thermostat"
                 label: Tr.trCtx("Feels like", "apparent temperature")
                 value: Weather.feelsLike
-                colour: Colours.palette.m3primary
+                colour: Colours.light ? Colours.palette.m3primary : Colours.accents.red
             }
             DetailCard {
                 icon: "air"
                 label: Tr.tr("Wind")
                 value: Weather.windSpeed ? Tr.tr("%1 km/h").arg(Weather.windSpeed) : "--"
-                colour: Colours.palette.m3tertiary
+                colour: Colours.light ? Colours.palette.m3tertiary : Colours.accents.green
             }
         }
 
@@ -170,7 +170,7 @@ Item {
                             Layout.alignment: Qt.AlignHCenter
                             text: forecastItem.index === 0 ? Tr.trCtx("Today", "forecast column") : new Date(forecastItem.modelData.date).toLocaleDateString(Qt.locale(), "ddd")
                             font: Tokens.font.body.builders.medium.weight(Font.DemiBold).build()
-                            color: Colours.palette.m3primary
+                            color: Colours.light ? Colours.palette.m3primary : Colours.palette.m3onSurface
                         }
 
                         StyledText {
@@ -186,7 +186,7 @@ Item {
                             Layout.alignment: Qt.AlignHCenter
                             text: forecastItem.modelData.icon
                             fontStyle: Tokens.font.icon.extraLarge
-                            color: Colours.palette.m3secondary
+                            color: Colours.light ? Colours.palette.m3secondary : [Colours.accents.purple, Colours.accents.orange, Colours.accents.blue, Colours.accents.green, Colours.accents.red, Colours.accents.yellow][forecastItem.index % 6]
                         }
 
                         StyledText {

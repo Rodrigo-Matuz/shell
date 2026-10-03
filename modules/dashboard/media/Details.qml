@@ -56,7 +56,7 @@ ColumnLayout {
     StyledText {
         Layout.fillWidth: true
         text: Players.active?.trackAlbum || Tr.tr("Unknown album")
-        color: Colours.palette.m3secondary
+        color: Colours.light ? Colours.palette.m3secondary : Colours.accents.orange
         font: Tokens.font.title.medium
         elide: Text.ElideRight
         animate: true
@@ -90,6 +90,7 @@ ColumnLayout {
             Layout.fillWidth: true
             value: Players.active ? Players.active.position / (Players.active.length || 1) : 0
             enabled: (Players.active?.canSeek ?? false) && !root.hasUnknownLength
+            fgColour: !enabled ? Qt.alpha(Colours.palette.m3onSurface, 0.38) : Colours.light ? Colours.palette.m3primary : Colours.accents.green
             wavy: true
             animateWave: Players.active?.isPlaying ?? false
             waveFrequency: 5
@@ -129,6 +130,8 @@ ColumnLayout {
             isRound: true
             shapeMorph: true
             checked: Players.active?.shuffle ?? false
+            activeColour: Colours.light ? Colours.palette.m3secondary : Colours.accents.yellow
+            activeOnColour: Colours.light ? Colours.palette.m3onSecondary : "#202020"
             font: Tokens.font.icon.builders.medium.weight(Font.Medium).build()
             disabled: !Players.active?.shuffleSupported
             onClicked: Players.active.shuffle = !Players.active?.shuffle

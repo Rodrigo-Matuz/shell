@@ -116,7 +116,7 @@ CustomMouseArea {
                 implicitHeight: monthYearDisplay.implicitHeight + Tokens.padding.extraSmall * 2
 
                 StateLayer {
-                    color: Colours.palette.m3primary
+                    color: Colours.light ? Colours.palette.m3primary : Colours.accents.yellow
                     radius: pressed ? Tokens.rounding.small : height / 2
                     disabled: {
                         const now = new Date();
@@ -141,7 +141,7 @@ CustomMouseArea {
 
                     anchors.centerIn: parent
                     text: grid.title
-                    color: Colours.palette.m3primary
+                    color: Colours.light ? Colours.palette.m3primary : Colours.accents.yellow
                     font: Tokens.font.title.builders.small.capitalisation(Font.Capitalize).build()
                 }
             }
@@ -168,7 +168,7 @@ CustomMouseArea {
                 horizontalAlignment: Text.AlignHCenter
                 text: model.shortName
                 font: Tokens.font.body.builders.small.weight(Font.Medium).build()
-                color: (model.day === 0 || model.day === 6) ? Colours.palette.m3tertiary : Colours.palette.m3onSurface
+                color: (model.day === 0 || model.day === 6) ? (Colours.light ? Colours.palette.m3tertiary : Colours.accents.orange) : Colours.palette.m3onSurface
             }
         }
 
@@ -210,7 +210,7 @@ CustomMouseArea {
                         color: {
                             const dayOfWeek = dayItem.model.date.getDay();
                             if (dayOfWeek === 0 || dayOfWeek === 6)
-                                return Colours.palette.m3tertiary;
+                                return Colours.light ? Colours.palette.m3tertiary : Colours.accents.orange;
 
                             return Colours.palette.m3onSurfaceVariant;
                         }
@@ -238,7 +238,7 @@ CustomMouseArea {
                 shape: MaterialShape.Sunny
 
                 clip: true
-                color: Colours.palette.m3primary
+                color: Colours.light ? Colours.palette.m3primary : Colours.accents.yellow
 
                 opacity: todayItem ? 1 : 0
 
@@ -251,7 +251,7 @@ CustomMouseArea {
 
                     source: grid
                     sourceColor: Colours.palette.m3onSurface
-                    colorizationColor: Colours.palette.m3onPrimary
+                    colorizationColor: Colours.light ? Colours.palette.m3onPrimary : "#202020"
                 }
             }
         }

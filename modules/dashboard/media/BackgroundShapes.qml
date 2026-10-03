@@ -18,7 +18,7 @@ Item {
     property real minRotSpeed: -12
     property real maxRotSpeed: 12
     property list<real> lightOpacities: [0.34, 0.34, 0.08, 0.2]
-    property list<real> darkOpacities: [0.16, 0.16, 0.04, 0.16]
+    property list<real> darkOpacities: [0.16, 0.16, 0.04, 0.09]
 
     function rand(min: real, max: real): real {
         return min + Math.random() * (max - min);
@@ -75,7 +75,7 @@ Item {
 
         implicitSize: root.minSize + (index / root.count) * (root.maxSize - root.minSize)
         shape: root.shapePool[Math.floor(Math.random() * root.shapePool.length)]
-        color: [Colours.palette.m3primaryContainer, Colours.palette.m3secondaryContainer, Colours.palette.m3tertiaryContainer, Colours.palette.m3outlineVariant][colourIdx]
+        color: [Colours.palette.m3primaryContainer, Colours.palette.m3secondaryContainer, Colours.palette.m3tertiaryContainer, Colours.light ? Colours.palette.m3outlineVariant : Colours.accents.red][colourIdx]
         opacity: Colours.light ? root.lightOpacities[colourIdx] : root.darkOpacities[colourIdx]
         rotation: root.rand(0, 360)
 

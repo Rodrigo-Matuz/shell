@@ -21,7 +21,7 @@ Item {
 
         animate: true
         text: Weather.icon
-        color: Colours.palette.m3secondary
+        color: Colours.light ? Colours.palette.m3secondary : Colours.accents.blue
         fontStyle: Tokens.font.icon.builders.extraLarge.scale(1.6).build()
     }
 
@@ -39,7 +39,7 @@ Item {
 
             animate: true
             text: Weather.temp
-            color: Colours.palette.m3primary
+            color: Colours.light ? Colours.palette.m3primary : Colours.accents.yellow
             font: Tokens.font.headline.builders.medium.width(110).weight(Font.DemiBold).build()
         }
 

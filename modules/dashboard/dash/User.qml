@@ -182,7 +182,7 @@ Item {
         anchors.leftMargin: -Tokens.padding.extraLargeIncreased
         implicitSize: Tokens.sizes.dashboard.uptimeSize + Tokens.padding.small * 2
         shape: MaterialShape.ClamShell
-        color: Colours.palette.m3tertiaryContainer
+        color: Colours.light ? Colours.palette.m3tertiaryContainer : Colours.accents.green
 
         Behavior on color {
             CAnim {}
@@ -191,7 +191,7 @@ Item {
         MaterialIcon {
             anchors.centerIn: parent
             text: "clock_arrow_up"
-            color: Colours.palette.m3onTertiaryContainer
+            color: Colours.light ? Colours.palette.m3onTertiaryContainer : "#202020"
             fontStyle: Tokens.font.icon.medium
         }
     }

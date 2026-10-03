@@ -38,18 +38,19 @@ Item {
         Resource {
             icon: "memory"
             value: Cpu.percentage
+            fgColour: Colours.light ? Colours.palette.m3primary : Colours.accents.blue
         }
 
         Resource {
             icon: "memory_alt"
             value: Memory.percentage
-            fgColour: Colours.palette.m3tertiary
+            fgColour: Colours.light ? Colours.palette.m3tertiary : Colours.accents.yellow
         }
 
         Resource {
             icon: "hard_disk"
             value: Storage.percentage
-            fgColour: Colours.palette.m3secondary
+            fgColour: Colours.light ? Colours.palette.m3secondary : Colours.accents.green
         }
     }
     component Resource: CircularProgress {

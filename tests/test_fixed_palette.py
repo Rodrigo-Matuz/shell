@@ -20,6 +20,40 @@ class PaletteTest(unittest.TestCase):
         }.items():
             self.assertRegex(colours, rf"readonly property color {name}: \"#{hex_value}\"")
 
+    def test_dashboard_tabs_use_semantic_fixed_accents(self):
+        tabs = (ROOT / "modules/dashboard/Tabs.qml").read_text()
+        for role in ("yellow", "red", "orange", "blue"):
+            self.assertIn(f"Colours.accents.{role}", tabs)
+        self.assertIn('root.accentForTab(bar.currentItem?.iconName ?? "")', tabs)
+        self.assertIn("Colours.palette.m3onSurface : Colours.palette.m3onSurfaceVariant", tabs)
+
+    def test_dashboard_home_spreads_accents(self):
+        expected = {
+            "DateTime.qml": ("red", "yellow"),
+            "Calendar.qml": ("yellow", "orange"),
+            "SmallWeather.qml": ("blue", "yellow"),
+            "User.qml": ("green",),
+            "Media.qml": ("red", "yellow"),
+            "Resources.qml": ("blue", "yellow", "green"),
+        }
+        for file, roles in expected.items():
+            with self.subTest(file=file):
+                source = (ROOT / "modules/dashboard/dash" / file).read_text()
+                for role in roles:
+                    self.assertIn(f"Colours.accents.{role}", source)
+
+    def test_weather_and_media_keep_colourful_controls_readable(self):
+        weather = (ROOT / "modules/dashboard/WeatherTab.qml").read_text()
+        details = (ROOT / "modules/dashboard/media/Details.qml").read_text()
+        shapes = (ROOT / "modules/dashboard/media/BackgroundShapes.qml").read_text()
+        for role in ("yellow", "red", "orange", "green"):
+            self.assertIn(f"Colours.accents.{role}", weather)
+        for role in ("orange", "yellow", "green"):
+            self.assertIn(f"Colours.accents.{role}", details)
+        self.assertIn("Colours.accents.red", shapes)
+        self.assertIn("Colours.light ?", weather)
+        self.assertIn("Colours.light ?", details)
+
     def test_accents_are_used_across_the_shell(self):
         expected = {
             "modules/bar/components/workspaces/ActiveIndicator.qml": ["blue"],

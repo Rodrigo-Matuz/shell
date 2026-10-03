@@ -18,6 +18,19 @@ Item {
 
     readonly property alias count: bar.count
 
+    // Match tab identity rather than index: individual tabs may be disabled.
+    function accentForTab(iconName: string): color {
+        if (Colours.light)
+            return Colours.palette.m3primary;
+        switch (iconName) {
+        case "dashboard": return Colours.accents.yellow;
+        case "queue_music": return Colours.accents.red;
+        case "speed": return Colours.accents.orange;
+        case "cloud": return Colours.accents.blue;
+        default: return Colours.accents.green;
+        }
+    }
+
     implicitHeight: bar.implicitHeight + bar.anchors.topMargin + indicator.implicitHeight + indicator.anchors.topMargin + separator.implicitHeight
 
     TabBar {
@@ -85,7 +98,7 @@ Item {
             anchors.right: parent.right
             implicitHeight: parent.implicitHeight * 2
 
-            color: Colours.palette.m3primary
+            color: root.accentForTab(bar.currentItem?.iconName ?? "")
             radius: Tokens.rounding.full
         }
 
@@ -149,7 +162,7 @@ Item {
                 implicitHeight: parent.height + Tokens.sizes.dashboard.tabIndicatorSpacing * 2
 
                 radius: Tokens.rounding.medium
-                color: tab.current ? Colours.palette.m3primary : Colours.palette.m3onSurface
+                color: tab.current ? root.accentForTab(tab.iconName) : Colours.palette.m3onSurface
                 onClicked: root.screenState.dashboardTab = tab.TabBar.index
             }
 
@@ -160,7 +173,7 @@ Item {
                 anchors.bottom: label.top
 
                 text: tab.iconName
-                color: tab.current ? Colours.palette.m3primary : Colours.palette.m3onSurfaceVariant
+                color: tab.current ? root.accentForTab(tab.iconName) : Colours.palette.m3onSurfaceVariant
                 fill: tab.current ? 1 : 0
                 fontStyle: Tokens.font.icon.medium
 
@@ -178,7 +191,7 @@ Item {
                 anchors.bottom: parent.bottom
 
                 text: tab.text
-                color: tab.current ? Colours.palette.m3primary : Colours.palette.m3onSurfaceVariant
+                color: tab.current ? Colours.palette.m3onSurface : Colours.palette.m3onSurfaceVariant
             }
         }
     }
