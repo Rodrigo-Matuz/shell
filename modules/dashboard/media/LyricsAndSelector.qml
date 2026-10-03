@@ -25,12 +25,14 @@ Item {
                 Layout.topMargin: Math.round(fontInfo.pointSize * 0.12)
                 text: "lyrics"
                 fontStyle: Tokens.font.icon.medium
+                color: Colours.light ? Colours.palette.m3primary : Colours.accents.yellow
             }
 
             StyledText {
                 Layout.fillWidth: true
                 text: Tr.tr("Lyrics")
                 font: Tokens.font.title.medium
+                color: Colours.light ? Colours.palette.m3primary : Colours.accents.yellow
             }
 
             LyricsInfo {}
@@ -42,6 +44,7 @@ Item {
         }
 
         SplitButton {
+            id: selector
             Layout.alignment: Qt.AlignHCenter
 
             type: SplitButton.Tonal
@@ -56,6 +59,7 @@ Item {
             minLeftWidth: layout.width - expandBtn.implicitWidth - spacing
             label.Layout.maximumWidth: minLeftWidth - iconLabel.implicitWidth - textRow.spacing - textRow.anchors.horizontalCenterOffset / 2 - horizontalPadding * 2
             label.elide: Text.ElideRight
+            iconLabel.color: selector.disabled ? selector.disabledTextColour : Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.purple
 
             stateLayer.disabled: true
             menuOnTop: true

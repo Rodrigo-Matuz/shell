@@ -259,14 +259,14 @@ Item {
             anchors.right: lyrics.contentItem.right
 
             text: modelData || ". . ."
-            color: ListView.isCurrentItem ? Colours.palette.m3primary : mouse.containsMouse ? Colours.palette.m3onSurface : Colours.palette.m3outline
+            color: ListView.isCurrentItem ? (Colours.light ? Colours.palette.m3primary : Colours.accents.blue) : mouse.containsMouse ? Colours.palette.m3onSurface : Colours.palette.m3outline
             font: Tokens.font.body.medium
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
             layer.enabled: effectScale > 0
             layer.effect: MultiEffect {
                 shadowEnabled: true
-                shadowColor: Colours.palette.m3primary
+                shadowColor: Colours.light ? Colours.palette.m3primary : Colours.accents.blue
                 shadowOpacity: 0.5 * lyric.effectScale
                 shadowBlur: 0.6 * lyric.effectScale
                 blur: 0.4 * lyric.effectScale

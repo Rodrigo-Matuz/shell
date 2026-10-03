@@ -130,8 +130,9 @@ ColumnLayout {
             isRound: true
             shapeMorph: true
             checked: Players.active?.shuffle ?? false
-            activeColour: Colours.light ? Colours.palette.m3secondary : Colours.accents.yellow
-            activeOnColour: Colours.light ? Colours.palette.m3onSecondary : "#202020"
+            activeColour: Colours.palette.m3secondaryContainer
+            activeOnColour: Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.yellow
+            inactiveOnColour: Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.yellow
             font: Tokens.font.icon.builders.medium.weight(Font.Medium).build()
             disabled: !Players.active?.shuffleSupported
             onClicked: Players.active.shuffle = !Players.active?.shuffle
@@ -143,6 +144,8 @@ ColumnLayout {
 
             type: IconButton.Tonal
             icon: "skip_previous"
+            activeOnColour: Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.purple
+            inactiveOnColour: Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.purple
             isRound: true
             shapeMorph: true
             font: Tokens.font.icon.large
@@ -154,6 +157,10 @@ ColumnLayout {
             id: playPauseBtn
 
             icon: Players.active?.isPlaying ? "pause" : "play_arrow"
+            activeColour: Colours.light ? Colours.palette.m3primary : Colours.accents.purple
+            inactiveColour: Colours.light ? Colours.palette.m3primary : Colours.accents.purple
+            activeOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.purpleForeground
+            inactiveOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.purpleForeground
             isRound: true
             shapeMorph: true
             fillWidth: true
@@ -168,6 +175,8 @@ ColumnLayout {
 
             type: IconButton.Tonal
             icon: "skip_next"
+            activeOnColour: Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.purple
+            inactiveOnColour: Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.purple
             isRound: true
             shapeMorph: true
             font: Tokens.font.icon.large
@@ -178,6 +187,9 @@ ColumnLayout {
         IconButton {
             type: IconButton.Tonal
             icon: Players.active?.loopState === MprisLoopState.Track ? "repeat_one" : "repeat"
+            activeColour: Colours.palette.m3secondaryContainer
+            activeOnColour: Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.red
+            inactiveOnColour: Colours.light ? Colours.palette.m3onSecondaryContainer : Colours.accents.red
             isRound: true
             shapeMorph: true
             checked: Players.active?.loopState === MprisLoopState.Track || Players.active?.loopState === MprisLoopState.Playlist

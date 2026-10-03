@@ -41,6 +41,7 @@ Item {
 
             required property int modelData
             readonly property real value: Math.max(1e-2, Math.min(1, Audio.cava.values[modelData]))
+            readonly property real accentPhase: modelData / GlobalConfig.services.visualiserBars
 
             readonly property real angle: modelData * 2 * Math.PI / GlobalConfig.services.visualiserBars
             readonly property real dist: shapeEdgeDist + value * root.maxMagnitude
@@ -55,7 +56,19 @@ Item {
             asynchronous: true
             capStyle: root.Tokens.rounding.scale === 0 ? ShapePath.SquareCap : ShapePath.RoundCap
             strokeWidth: 360 / GlobalConfig.services.visualiserBars - root.Tokens.spacing.small / 4
-            strokeColor: Colours.palette.m3primary
+            strokeColor: {
+                if (Colours.light)
+                    return Colours.palette.m3primary;
+                if (accentPhase < 0.4)
+                    return Colours.accents.blue;
+                if (accentPhase < 0.8)
+                    return Colours.accents.purple;
+                if (accentPhase < 0.88)
+                    return Colours.accents.red;
+                if (accentPhase < 0.95)
+                    return Colours.accents.orange;
+                return Colours.accents.yellow;
+            }
 
             startX: root.centerX + shapeEdgeDist * cos
             startY: root.centerY + shapeEdgeDist * sin
