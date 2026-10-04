@@ -17,6 +17,14 @@ Item {
     readonly property real centerY: height / 2
     readonly property real spacing: Tokens.spacing.medium
     readonly property real maxMagnitude: (implicitWidth - cover.implicitWidth) / 2 - spacing
+    readonly property var accentColours: [
+        Colours.accents.red,
+        Colours.accents.orange,
+        Colours.accents.yellow,
+        Colours.accents.green,
+        Colours.accents.blue,
+        Colours.accents.purple
+    ]
 
     ServiceRef {
         service: Audio.cava
@@ -41,7 +49,6 @@ Item {
 
             required property int modelData
             readonly property real value: Math.max(1e-2, Math.min(1, Audio.cava.values[modelData]))
-            readonly property real accentPhase: modelData / GlobalConfig.services.visualiserBars
 
             readonly property real angle: modelData * 2 * Math.PI / GlobalConfig.services.visualiserBars
             readonly property real dist: shapeEdgeDist + value * root.maxMagnitude
@@ -56,19 +63,7 @@ Item {
             asynchronous: true
             capStyle: root.Tokens.rounding.scale === 0 ? ShapePath.SquareCap : ShapePath.RoundCap
             strokeWidth: 360 / GlobalConfig.services.visualiserBars - root.Tokens.spacing.small / 4
-            strokeColor: {
-                if (Colours.light)
-                    return Colours.palette.m3primary;
-                if (accentPhase < 0.4)
-                    return Colours.accents.blue;
-                if (accentPhase < 0.8)
-                    return Colours.accents.purple;
-                if (accentPhase < 0.88)
-                    return Colours.accents.red;
-                if (accentPhase < 0.95)
-                    return Colours.accents.orange;
-                return Colours.accents.yellow;
-            }
+            strokeColor: Colours.light ? Colours.palette.m3primary : root.accentColours[Math.floor(modelData * root.accentColours.length / GlobalConfig.services.visualiserBars)]
 
             startX: root.centerX + shapeEdgeDist * cos
             startY: root.centerY + shapeEdgeDist * sin

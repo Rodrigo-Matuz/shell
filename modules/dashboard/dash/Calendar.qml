@@ -168,7 +168,7 @@ CustomMouseArea {
                 horizontalAlignment: Text.AlignHCenter
                 text: model.shortName
                 font: Tokens.font.body.builders.small.weight(Font.Medium).build()
-                color: model.day === 7 ? (Colours.light ? Colours.palette.m3error : Colours.accents.red) : model.day === 6 ? (Colours.light ? Colours.palette.m3primary : Colours.accents.purple) : Colours.palette.m3onSurface
+                color: model.day === 0 ? (Colours.light ? Colours.palette.m3error : Colours.accents.red) : model.day === 6 ? (Colours.light ? Colours.palette.m3primary : Colours.accents.purple) : Colours.palette.m3onSurface
             }
         }
 
@@ -196,6 +196,7 @@ CustomMouseArea {
                     id: dayItem
 
                     required property var model
+                    readonly property bool inDisplayedMonth: model.date.getMonth() === grid.month && model.date.getFullYear() === grid.year
 
                     implicitWidth: implicitHeight
                     implicitHeight: text.implicitHeight + Tokens.padding.small
@@ -208,9 +209,6 @@ CustomMouseArea {
                         horizontalAlignment: Text.AlignHCenter
                         text: grid.locale.toString(dayItem.model.day)
                         color: {
-                            if (dayItem.model.month !== grid.month)
-                                return Qt.alpha(Colours.palette.m3onSurfaceVariant, dayItem.model.today ? 0.4 : 1);
-
                             const dayOfWeek = dayItem.model.date.getDay();
                             if (dayOfWeek === 0)
                                 return Colours.light ? Colours.palette.m3error : Colours.accents.red;
@@ -219,7 +217,7 @@ CustomMouseArea {
 
                             return Colours.palette.m3onSurfaceVariant;
                         }
-                        opacity: dayItem.model.today || dayItem.model.month === grid.month ? 1 : 0.4
+                        opacity: dayItem.inDisplayedMonth ? 1 : 0.4
                         font: Tokens.font.body.small
                     }
                 }
@@ -228,7 +226,7 @@ CustomMouseArea {
             MaterialShape {
                 id: todayIndicator
 
-                readonly property Item todayItem: grid.contentItem.children.find(c => c.model.today && c.model.month === grid.month) ?? null
+                readonly property Item todayItem: grid.contentItem.children.find(c => c.model.today && c.inDisplayedMonth) ?? null
                 property Item today
 
                 onTodayItemChanged: {
@@ -243,7 +241,7 @@ CustomMouseArea {
                 shape: MaterialShape.Sunny
 
                 clip: true
-                color: Colours.light ? Colours.palette.m3primary : Colours.accents.yellow
+                color: Colours.accents.blue
 
                 opacity: todayItem ? 1 : 0
 
@@ -256,7 +254,7 @@ CustomMouseArea {
 
                     source: grid
                     sourceColor: Colours.palette.m3onSurface
-                    colorizationColor: Colours.light ? Colours.palette.m3onPrimary : "#202020"
+                    colorizationColor: Colours.accents.blueForeground
                 }
             }
         }

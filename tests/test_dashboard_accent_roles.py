@@ -37,27 +37,40 @@ class DashboardAccentRolesTest(unittest.TestCase):
         self.assertEqual(2, clock.count('Colours.accents.purple'))
         self.assertIn('Colours.accents.yellow', clock)
 
-    def test_calendar_weekends_are_distinct_and_outside_month_neutral(self):
+    def test_calendar_weekend_columns_keep_their_hues_while_adjacent_dates_are_dim(self):
         calendar = source("dash/Calendar.qml")
-        # Qt::DayOfWeek is 1..7; JS Date.getDay() below is 0..6.
-        self.assertIn('model.day === 7', calendar)
+        # Qt 6.11 DayOfWeekRow exposes Sunday as 0 and Saturday as 6.
+        self.assertIn('model.day === 0', calendar)
+        self.assertNotIn('model.day === 7', calendar)
         self.assertIn('model.day === 6', calendar)
         self.assertIn('dayOfWeek === 0', calendar)
         self.assertIn('dayOfWeek === 6', calendar)
-        self.assertIn('dayItem.model.month !== grid.month', calendar)
-        self.assertIn('return Qt.alpha(Colours.palette.m3onSurfaceVariant, dayItem.model.today ? 0.4 : 1);', calendar)
-        self.assertIn('c.model.today && c.model.month === grid.month', calendar)
+        self.assertIn('readonly property bool inDisplayedMonth: model.date.getMonth() === grid.month && model.date.getFullYear() === grid.year', calendar)
+        day_color = calendar.split('text: grid.locale.toString(dayItem.model.day)', 1)[1].split('opacity: dayItem.inDisplayedMonth', 1)[0]
+        self.assertNotIn('if (!dayItem.inDisplayedMonth)', day_color)
+        self.assertIn('dayOfWeek === 0', day_color)
+        self.assertIn('dayOfWeek === 6', day_color)
+        self.assertIn('return Colours.palette.m3onSurfaceVariant;', day_color)
+        self.assertIn('opacity: dayItem.inDisplayedMonth ? 1 : 0.4', calendar)
+        self.assertIn('c.model.today && c.inDisplayedMonth', calendar)
+        self.assertNotIn('dayItem.model.month', calendar)
         self.assertIn('Colours.accents.red', calendar)
         self.assertIn('Colours.accents.purple', calendar)
         self.assertNotIn('Colours.accents.orange', calendar)
-        self.assertIn('Colours.accents.yellow', calendar)
-        self.assertIn('colorizationColor: Colours.light ? Colours.palette.m3onPrimary : "#202020"', calendar)
+        self.assertIn('Colours.accents.yellow', calendar)  # month heading remains yellow
+        today = calendar.split('id: todayIndicator', 1)[1]
+        self.assertIn('color: Colours.accents.blue', today)
+        self.assertIn('colorizationColor: Colours.accents.blueForeground', today)
+        colours = (DASH.parents[1] / "services/Colours.qml").read_text()
+        self.assertIn('readonly property color blueForeground: "#FFFFFF"', colours)
 
-    def test_resource_rings_have_blue_orange_green_and_memory_icon_yellow(self):
+    def test_resource_rings_and_icons_are_blue_orange_green(self):
         resources = source("dash/Resources.qml")
-        for accent in ('blue', 'orange', 'yellow', 'green'):
+        for accent in ('blue', 'orange', 'green'):
             self.assertIn(f'Colours.accents.{accent}', resources)
+        self.assertNotIn('Colours.accents.yellow', resources)
         self.assertIn('property color iconColour: fgColour', resources)
+        self.assertNotIn('iconColour: Colours.light', resources)
         self.assertIn('color: res.iconColour', resources)
 
     def test_media_actions_titles_and_two_arc_segments(self):

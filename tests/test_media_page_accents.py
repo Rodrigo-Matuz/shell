@@ -1,5 +1,6 @@
 """Media-page accent roles; keep transport and visualizer implementations intact."""
 
+import re
 import unittest
 from pathlib import Path
 
@@ -76,9 +77,14 @@ class MediaPageAccentsTest(unittest.TestCase):
         visualizer = source("CoverVisualiser.qml")
         self.assertIn('data: bars.instances', visualizer)
         self.assertIn('readonly property real value: Math.max(1e-2, Math.min(1, Audio.cava.values[modelData]))', visualizer)
-        self.assertIn('readonly property real accentPhase: modelData / GlobalConfig.services.visualiserBars', visualizer)
-        for name in ('blue', 'purple', 'red', 'orange', 'yellow'):
-            self.assertIn(f'Colours.accents.{name}', visualizer)
+        palette = re.findall(r'Colours\.accents\.(red|orange|yellow|green|blue|purple)', visualizer)
+        self.assertEqual(['red', 'orange', 'yellow', 'green', 'blue', 'purple'], palette)
+        self.assertIn('readonly property var accentColours: [', visualizer)
+        self.assertIn('root.accentColours[Math.floor(modelData * root.accentColours.length / GlobalConfig.services.visualiserBars)]', visualizer)
+        self.assertNotIn('accentPhase', visualizer)
+        for count in (60, 100):
+            sectors = [sum(i * len(palette) // count == sector for i in range(count)) for sector in range(len(palette))]
+            self.assertLessEqual(max(sectors) - min(sectors), 1)
         self.assertNotIn('ShaderEffect', visualizer)
 
 

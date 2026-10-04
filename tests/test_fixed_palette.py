@@ -30,11 +30,11 @@ class PaletteTest(unittest.TestCase):
     def test_dashboard_home_spreads_accents(self):
         expected = {
             "DateTime.qml": ("purple", "yellow"),
-            "Calendar.qml": ("yellow", "red", "purple"),
+            "Calendar.qml": ("yellow", "red", "purple", "blue"),
             "SmallWeather.qml": ("blue", "yellow"),
             "User.qml": ("blue", "red", "purple", "green"),
             "Media.qml": ("red", "yellow", "purple"),
-            "Resources.qml": ("blue", "orange", "yellow", "green"),
+            "Resources.qml": ("blue", "orange", "green"),
         }
         for file, roles in expected.items():
             with self.subTest(file=file):

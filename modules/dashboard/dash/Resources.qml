@@ -45,7 +45,6 @@ Item {
             icon: "memory_alt"
             value: Memory.percentage
             fgColour: Colours.light ? Colours.palette.m3tertiary : Colours.accents.orange
-            iconColour: Colours.light ? Colours.palette.m3primary : Colours.accents.yellow
         }
 
         Resource {
