@@ -72,14 +72,14 @@ void VisualiserBars::drawSide(QPainter* painter, bool rightSide) {
     if (count == 0)
         return;
 
-    const qreal sideWidth = w * 0.4;
+    const qreal sideWidth = w * 0.5;
     const qreal slotWidth = sideWidth / static_cast<qreal>(count);
     const qreal barWidth = slotWidth - m_spacing;
 
     if (barWidth <= 0)
         return;
 
-    const qreal sideOffset = rightSide ? w * 0.6 : 0;
+    const qreal sideOffset = rightSide ? w * 0.5 : 0;
     const qreal maxBarHeight = h * 0.4;
 
     for (qsizetype i = 0; i < count; ++i) {
@@ -93,6 +93,13 @@ void VisualiserBars::drawSide(QPainter* painter, bool rightSide) {
         const qreal x = static_cast<qreal>(i) * slotWidth + sideOffset;
         const qreal y = h - barHeight;
         const qreal r = std::min({ m_rounding, barWidth / 2.0, barHeight });
+
+        if (!m_barColors.isEmpty()) {
+            const qsizetype globalIndex = rightSide ? count + i : i;
+            const QColor barColour = m_barColors.at(globalIndex % m_barColors.size()).value<QColor>();
+            if (barColour.isValid())
+                painter->setBrush(barColour);
+        }
 
         QPainterPath path;
         path.moveTo(x, h);
@@ -131,6 +138,18 @@ void VisualiserBars::setValues(const QVector<double>& values) {
     }
 
     emit valuesChanged();
+}
+
+QVariantList VisualiserBars::barColors() const {
+    return m_barColors;
+}
+
+void VisualiserBars::setBarColors(const QVariantList& colors) {
+    if (m_barColors == colors)
+        return;
+    m_barColors = colors;
+    emit barColorsChanged();
+    update();
 }
 
 bool VisualiserBars::settled() const {

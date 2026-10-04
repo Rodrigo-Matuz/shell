@@ -4,6 +4,7 @@
 #include <qobject.h>
 #include <qqmlintegration.h>
 #include <qquickpainteditem.h>
+#include <qvariant.h>
 #include <qvector.h>
 
 namespace caelestia::components {
@@ -13,6 +14,7 @@ class VisualiserBars : public QQuickPaintedItem {
     QML_ELEMENT
 
     Q_PROPERTY(QVector<double> values READ values WRITE setValues NOTIFY valuesChanged)
+    Q_PROPERTY(QVariantList barColors READ barColors WRITE setBarColors NOTIFY barColorsChanged)
     Q_PROPERTY(QColor primaryColor READ primaryColor WRITE setPrimaryColor NOTIFY primaryColorChanged)
     Q_PROPERTY(QColor secondaryColor READ secondaryColor WRITE setSecondaryColor NOTIFY secondaryColorChanged)
     Q_PROPERTY(qreal rounding READ rounding WRITE setRounding NOTIFY roundingChanged)
@@ -29,6 +31,9 @@ public:
 
     [[nodiscard]] QVector<double> values() const;
     void setValues(const QVector<double>& values);
+
+    [[nodiscard]] QVariantList barColors() const;
+    void setBarColors(const QVariantList& colors);
 
     [[nodiscard]] QColor primaryColor() const;
     void setPrimaryColor(const QColor& color);
@@ -49,6 +54,7 @@ public:
 
 signals:
     void valuesChanged();
+    void barColorsChanged();
     void primaryColorChanged();
     void secondaryColorChanged();
     void roundingChanged();
@@ -61,6 +67,7 @@ private:
 
     QVector<double> m_targetValues;
     QVector<double> m_displayValues;
+    QVariantList m_barColors;
     QColor m_primaryColor;
     QColor m_secondaryColor;
     qreal m_rounding = 0.0;

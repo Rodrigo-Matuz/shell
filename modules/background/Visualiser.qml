@@ -63,8 +63,14 @@ Item {
                     anchors.leftMargin: (ShellState.componentsFor(root.screen)?.bar?.exclusiveZone ?? 0) + Tokens.spacing.small * Config.background.visualiser.spacing
 
                     values: Audio.cava.values
-                    primaryColor: Qt.alpha(Colours.palette.m3primary, 0.7)
-                    secondaryColor: Qt.alpha(Colours.palette.m3inversePrimary, 0.7)
+                    barColors: [
+                        Qt.alpha(Colours.accents.red, 0.7),
+                        Qt.alpha(Colours.accents.orange, 0.7),
+                        Qt.alpha(Colours.accents.yellow, 0.7),
+                        Qt.alpha(Colours.accents.green, 0.7),
+                        Qt.alpha(Colours.accents.blue, 0.7),
+                        Qt.alpha(Colours.accents.purple, 0.7)
+                    ]
                     rounding: Tokens.rounding.medium * Config.background.visualiser.rounding
                     spacing: Tokens.spacing.extraSmall * Config.background.visualiser.spacing
                     animationDuration: Tokens.anim.durations.normal
