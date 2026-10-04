@@ -82,7 +82,7 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                     text: Weather.icon
                     fontStyle: Tokens.font.icon.builders.extraLarge.scale(3).build()
-                    color: Colours.palette.m3secondary
+                    color: Colours.light ? Colours.palette.m3secondary : Colours.accents.purple
                     animate: true
                 }
 
@@ -93,7 +93,7 @@ Item {
                     StyledText {
                         text: Weather.temp
                         font: Tokens.font.body.builders.large.size(28 * 2).weight(Font.Medium).build()
-                        color: Colours.light ? Colours.palette.m3primary : Colours.accents.orange
+                        color: Colours.palette.m3onSurface
                     }
 
                     StyledText {
@@ -197,7 +197,7 @@ Item {
                                 return Tr.trCtx("%1 / %2", "min/max temperature").arg(min).arg(max);
                             }
                             font: Tokens.font.body.builders.small.weight(Font.DemiBold).build()
-                            color: Colours.palette.m3tertiary
+                            color: Colours.palette.m3onSurface
                         }
                     }
                 }
@@ -242,6 +242,7 @@ Item {
                 StyledText {
                     text: detailRoot.value
                     font: Tokens.font.body.builders.small.weight(Font.DemiBold).build()
+                    color: Colours.palette.m3onSurface
                     horizontalAlignment: Text.AlignLeft
                 }
             }

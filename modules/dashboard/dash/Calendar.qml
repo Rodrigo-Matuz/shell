@@ -255,6 +255,7 @@ CustomMouseArea {
                     source: grid
                     sourceColor: Colours.palette.m3onSurface
                     colorizationColor: Colours.accents.blueForeground
+                    brightness: 1
                 }
             }
         }
