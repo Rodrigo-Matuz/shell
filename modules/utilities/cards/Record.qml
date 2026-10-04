@@ -55,7 +55,7 @@ StyledRect {
                     anchors.centerIn: parent
                     anchors.verticalCenterOffset: 1
                     text: "screen_record"
-                    color: Recorder.running ? Colours.palette.m3onSecondary : Colours.palette.m3onSecondaryContainer
+                    color: Recorder.running ? (Colours.light ? Colours.palette.m3error : Colours.accents.red) : (Colours.light ? Colours.palette.m3primary : Colours.accents.purple)
                     fontStyle: Tokens.font.icon.large
                 }
             }
@@ -83,6 +83,11 @@ StyledRect {
 
             TextButton {
                 text: Tr.tr("Record in OBS")
+                type: TextButton.Filled
+                activeColour: Colours.light ? Colours.palette.m3error : Colours.accents.red
+                inactiveColour: Colours.light ? Colours.palette.m3error : Colours.accents.red
+                activeOnColour: Colours.light ? Colours.palette.m3onError : Colours.accents.whiteForeground
+                inactiveOnColour: Colours.light ? Colours.palette.m3onError : Colours.accents.whiteForeground
                 disabled: !Recorder.available || Recorder.pending || Recorder.running
                 onClicked: Recorder.start()
             }
@@ -185,7 +190,7 @@ StyledRect {
 
             StyledRect {
                 radius: Tokens.rounding.full
-                color: Recorder.paused ? Colours.palette.m3tertiary : Colours.palette.m3error
+                color: Recorder.paused ? (Colours.light ? Colours.palette.m3tertiary : Colours.accents.yellow) : (Colours.light ? Colours.palette.m3error : Colours.accents.red)
 
                 implicitWidth: recText.implicitWidth + Tokens.padding.medium * 2
                 implicitHeight: recText.implicitHeight + Tokens.padding.large
@@ -196,7 +201,7 @@ StyledRect {
                     anchors.centerIn: parent
                     animate: true
                     text: Recorder.paused ? Tr.trCtx("PAUSED", "recording status") : Tr.trCtx("REC", "recording status")
-                    color: Recorder.paused ? Colours.palette.m3onTertiary : Colours.palette.m3onError
+                    color: Recorder.paused ? (Colours.light ? Colours.palette.m3onTertiary : Colours.on(Colours.accents.yellow)) : (Colours.light ? Colours.palette.m3onError : Colours.accents.whiteForeground)
                     font: Tokens.font.mono.small
                 }
 

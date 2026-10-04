@@ -174,6 +174,8 @@ Singleton {
         readonly property color purpleForeground: "#FFFFFF"
         readonly property color blue: "#1E65FF"
         readonly property color blueForeground: "#FFFFFF"
+        readonly property color whiteForeground: "#FFFFFF"
+        readonly property color darkForeground: "#050505"
         readonly property color orange: "#FF4D00"
         readonly property color yellow: "#FFFF87"
         readonly property color green: "#A4E400"

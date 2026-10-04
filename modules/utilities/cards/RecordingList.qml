@@ -40,6 +40,7 @@ ColumnLayout {
             MaterialIcon {
                 Layout.alignment: Qt.AlignVCenter
                 text: "list"
+                color: Colours.palette.m3onSurface
                 fontStyle: Tokens.font.icon.large
             }
 
@@ -53,6 +54,7 @@ ColumnLayout {
             IconButton {
                 icon: root.props.recordingListExpanded ? "unfold_less" : "unfold_more"
                 type: IconButton.Text
+                inactiveOnColour: Colours.palette.m3onSurfaceVariant
                 label.animate: true
                 onClicked: root.props.recordingListExpanded = !root.props.recordingListExpanded
             }
@@ -109,6 +111,7 @@ ColumnLayout {
             IconButton {
                 icon: "play_arrow"
                 type: IconButton.Text
+                inactiveOnColour: Colours.palette.m3onSurfaceVariant
                 onClicked: {
                     root.screenState.utilities = false;
                     root.screenState.sidebar = false;
@@ -119,6 +122,7 @@ ColumnLayout {
             IconButton {
                 icon: "folder"
                 type: IconButton.Text
+                inactiveOnColour: Colours.palette.m3onSurfaceVariant
                 onClicked: {
                     root.screenState.utilities = false;
                     root.screenState.sidebar = false;

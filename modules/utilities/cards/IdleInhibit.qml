@@ -38,7 +38,7 @@ StyledRect {
 
                 anchors.centerIn: parent
                 text: "coffee"
-                color: IdleInhibitor.enabled ? Colours.palette.m3onSecondary : Colours.palette.m3onSecondaryContainer
+                color: Colours.light ? Colours.palette.m3tertiary : Colours.accents.yellow
                 fontStyle: Tokens.font.icon.large
             }
         }
@@ -65,6 +65,8 @@ StyledRect {
 
         StyledSwitch {
             checked: IdleInhibitor.enabled
+            checkedColour: Colours.light ? Colours.palette.m3tertiary : Colours.accents.yellow
+            checkedOnColour: Colours.light ? Colours.palette.m3onTertiary : Colours.on(Colours.accents.yellow)
             onToggled: IdleInhibitor.enabled = checked
         }
     }
@@ -89,7 +91,7 @@ StyledRect {
             implicitHeight: activeText.implicitHeight + Tokens.padding.small
 
             radius: Tokens.rounding.full
-            color: Colours.palette.m3primary
+            color: Colours.light ? Colours.palette.m3tertiary : Colours.accents.yellow
 
             StyledText {
                 id: activeText
@@ -97,7 +99,7 @@ StyledRect {
                 anchors.centerIn: parent
                 // TRANSLATORS: %1 = a clock time, e.g. 14:30
                 text: Tr.tr("Active since %1").arg(Qt.formatTime(IdleInhibitor.enabledSince, Units.twelveHourClock ? "hh:mm a" : "hh:mm"))
-                color: Colours.palette.m3onPrimary
+                color: Colours.light ? Colours.palette.m3onTertiary : Colours.on(Colours.accents.yellow)
                 font: Tokens.font.body.builders.small.size(Math.round(Tokens.font.body.small.pointSize * 0.9)).build()
             }
         }

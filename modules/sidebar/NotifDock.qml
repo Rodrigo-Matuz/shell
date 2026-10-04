@@ -186,6 +186,11 @@ Item {
             id: clearBtn
 
             icon: "clear_all"
+            type: IconButton.Filled
+            activeColour: Colours.light ? Colours.palette.m3primary : Colours.accents.purple
+            inactiveColour: Colours.light ? Colours.palette.m3primary : Colours.accents.purple
+            activeOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.whiteForeground
+            inactiveOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.whiteForeground
             font: Tokens.font.icon.large
             onClicked: clearTimer.start()
 
