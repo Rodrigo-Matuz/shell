@@ -58,7 +58,7 @@ StyledClippingRect {
             Layout.fillWidth: true
             animate: true
             text: (Players.active?.trackTitle ?? Tr.tr("Nothing playing")) || Tr.tr("Unknown track")
-            color: Colours.palette.m3primary
+            color: Colours.palette.m3onSurface
             horizontalAlignment: Text.AlignHCenter
             font: Tokens.font.title.medium
             elide: Text.ElideRight
@@ -83,6 +83,8 @@ StyledClippingRect {
             IconButton {
                 type: IconButton.Tonal
                 icon: "skip_previous"
+                inactiveOnColour: Colours.accents.purple
+                activeOnColour: Colours.accents.purple
                 isRound: true
                 shapeMorph: true
                 disabled: !Players.active?.canGoPrevious
@@ -94,6 +96,10 @@ StyledClippingRect {
                 isRound: true
                 shapeMorph: true
                 checked: Players.active?.isPlaying ?? false
+                activeColour: Colours.accents.purple
+                inactiveColour: Colours.accents.purple
+                activeOnColour: Colours.accents.purpleForeground
+                inactiveOnColour: Colours.accents.purpleForeground
                 disabled: !Players.active?.canTogglePlaying
                 onClicked: Players.active?.togglePlaying()
                 implicitWidth: implicitHeight + Tokens.padding.largeIncreased * 2
@@ -102,6 +108,8 @@ StyledClippingRect {
             IconButton {
                 type: IconButton.Tonal
                 icon: "skip_next"
+                inactiveOnColour: Colours.accents.purple
+                activeOnColour: Colours.accents.purple
                 isRound: true
                 shapeMorph: true
                 disabled: !Players.active?.canGoNext

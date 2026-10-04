@@ -40,7 +40,7 @@ StyledRect {
                 implicitWidth: prompt.implicitWidth + Tokens.padding.medium * 2
                 implicitHeight: prompt.implicitHeight + Tokens.padding.small * 2
 
-                color: Colours.palette.m3primary
+                color: Colours.accents.blue
                 radius: Tokens.rounding.medium
 
                 MonoText {
@@ -48,7 +48,7 @@ StyledRect {
 
                     anchors.centerIn: parent
                     text: ">"
-                    color: Colours.palette.m3onPrimary
+                    color: Colours.accents.blueForeground
                 }
             }
 
@@ -150,7 +150,7 @@ StyledRect {
 
                         implicitWidth: implicitHeight
                         implicitHeight: root.cBoxSize
-                        color: Colours.palette[`term${index}`]
+                        color: [Colours.accents.red, Colours.accents.orange, Colours.accents.yellow, Colours.accents.green, Colours.accents.blue, Colours.accents.purple, Colours.palette.m3surfaceContainerLowest, Colours.palette.term0][index]
                         radius: Tokens.rounding.medium
                     }
                 }
@@ -172,7 +172,7 @@ StyledRect {
         ColouredIcon {
             source: SysInfo.osLogo
             implicitSize: height
-            colour: Colours.palette.m3primary
+            colour: Colours.accents.blue
             layer.enabled: Config.lock.recolourLogo
         }
     }

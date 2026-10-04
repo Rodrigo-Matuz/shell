@@ -90,12 +90,13 @@ StyledRect {
                 Resource {
                     id: cpu
 
-                    icon: "memory"
+                    icon: "thermostat"
                     value: Strings.percentOne(Cpu.percentage)
                     fillValue: Cpu.percentage
-                    colour: Colours.palette.m3primary
+                    iconColour: Colours.accents.purple
+                    colour: Colours.accents.blue
                     shapeColour: Colours.palette.m3primaryContainer
-                    fillColour: Qt.alpha(Colours.palette.m3secondary, 0.3)
+                    fillColour: Qt.alpha(Colours.accents.blue, 0.3)
                     shape: MaterialShape.Pentagon
 
                     MaterialShape {
@@ -120,7 +121,7 @@ StyledRect {
                             anchors.verticalCenterOffset: Math.round(fontInfo.pointSize * 0.04)
 
                             text: Units.formatSensorTemp(Cpu.temperature)
-                            color: Cpu.temperature > 90 ? Colours.palette.m3onErrorContainer : Colours.palette.m3secondary
+                            color: Cpu.temperature > 90 ? Colours.palette.m3onErrorContainer : Colours.accents.purple
                             font: Tokens.font.title.builders.medium.scale(cpu.width / 112).width(50).build()
                         }
                     }
@@ -130,9 +131,10 @@ StyledRect {
                     icon: "memory_alt"
                     value: Strings.percentOne(Memory.percentage)
                     fillValue: Memory.percentage
-                    colour: Colours.palette.m3tertiary
+                    iconColour: Colours.accents.orange
+                    colour: Colours.accents.orange
                     shapeColour: Colours.palette.m3onTertiary
-                    fillColour: Qt.alpha(Colours.palette.m3tertiary, 0.3)
+                    fillColour: Qt.alpha(Colours.accents.orange, 0.3)
                     shape: MaterialShape.Slanted
                 }
 
@@ -140,9 +142,10 @@ StyledRect {
                     icon: "hard_disk"
                     value: Strings.percentOne(Storage.percentage)
                     fillValue: Storage.percentage
-                    colour: Colours.palette.m3secondary
+                    iconColour: Colours.accents.green
+                    colour: Colours.accents.green
                     shapeColour: Colours.palette.m3secondaryContainer
-                    fillColour: Qt.alpha(Colours.palette.m3secondary, 0.4)
+                    fillColour: Qt.alpha(Colours.accents.green, 0.4)
                     shape: MaterialShape.Gem
                 }
             }
@@ -210,6 +213,7 @@ StyledRect {
         required property string value
         required property color colour
         required property color shapeColour
+        property color iconColour: colour
         property color fillColour
         property real fillValue: -1
         property alias shape: shape.shape
@@ -262,7 +266,7 @@ StyledRect {
             MaterialIcon {
                 Layout.alignment: Qt.AlignHCenter
                 text: res.icon
-                color: Colours.palette.m3secondary
+                color: res.iconColour
                 fontStyle: Tokens.font.icon.builders.medium.scale(root.fontScale).build()
             }
 

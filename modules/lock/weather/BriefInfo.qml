@@ -29,14 +29,14 @@ ColumnLayout {
 
             animate: true
             text: Weather.temp
-            color: Colours.palette.m3primary
+            color: Colours.palette.m3onSurface
             font: Tokens.font.headline.builders.large.scale(1.5).weight(Font.DemiBold).width(80).build()
         }
 
         MaterialIcon {
             animate: true
             text: Weather.icon
-            color: Colours.palette.m3secondary
+            color: Colours.accents.red
             fontStyle: Tokens.font.headline.builders.large.scale(1.5).build()
         }
     }
@@ -55,10 +55,13 @@ ColumnLayout {
         visible: root.rootHeight > Tokens.sizes.lock.showWeatherDetailsHeight
         Layout.alignment: Qt.AlignHCenter
         animate: true
+        textFormat: Text.MarkdownText
         text: {
             const today = Weather.forecast[0];
-            // TRANSLATORS: %1/%2 = today's max and min temperature, units already included
-            return Tr.tr("High %1 • Low %2").arg(Weather.formatTemp(today?.maxTempC)).arg(Weather.formatTemp(today?.minTempC));
+            const high = `<span style='color:${Colours.accents.orange}'>${Weather.formatTemp(today?.maxTempC)}</span>`;
+            const low = `<span style='color:${Colours.accents.blue}'>${Weather.formatTemp(today?.minTempC)}</span>`;
+            // Keep one translated string so locales retain their word order and punctuation.
+            return Tr.tr("High %1 • Low %2").arg(high).arg(low);
         }
         color: Colours.palette.m3onSurfaceVariant
         font: Tokens.font.body.medium

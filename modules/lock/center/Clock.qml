@@ -23,7 +23,7 @@ Item {
 
         y: -root.calcTopOff(hourMetrics)
         text: Time.hourStr
-        color: Colours.palette.m3primary
+        color: Colours.palette.m3onSurface
         font: Tokens.font.headline.builders.large.scale(7 * root.centerScale).width(30).build()
 
         TextMetrics {
@@ -41,7 +41,7 @@ Item {
         y: -root.calcTopOff(minuteMetrics)
 
         text: Time.minuteStr
-        color: Colours.palette.m3secondary
+        color: Colours.accents.purple
         font: Tokens.font.headline.builders.large.scale((Units.twelveHourClock ? 3.8 : 7) * root.centerScale).width(30).build()
 
         TextMetrics {
@@ -79,7 +79,7 @@ Item {
                 }
 
                 text: Time.amPmStr
-                color: Colours.palette.m3onSurface
+                color: Colours.accents.yellow
                 font: Tokens.font.headline.builders.small.scale(2 * root.centerScale).width(30).build()
 
                 TextMetrics {

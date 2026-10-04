@@ -27,7 +27,12 @@ ColumnLayout {
     StyledText {
         Layout.alignment: Qt.AlignHCenter
 
-        text: Time.format("dddd • d MMM").toUpperCase()
+        textFormat: Text.MarkdownText
+        text: {
+            const day = Time.format("dddd •").toUpperCase();
+            const date = Time.format("d MMM").toUpperCase();
+            return `<span style='color:${Colours.palette.m3onSurface}'>${day}</span> <span style='color:${Colours.accents.yellow}'>${date}</span>`;
+        }
         color: Colours.palette.m3onSurface
         font: Tokens.font.title.builders.medium.weight(Font.DemiBold).build()
     }
