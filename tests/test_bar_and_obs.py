@@ -11,9 +11,12 @@ class BarAndObsTest(unittest.TestCase):
     def source(self, relative_path):
         return (ROOT / relative_path).read_text()
 
-    def test_date_is_green_and_both_os_logo_variants_blue(self):
+    def test_calendar_icon_is_orange_and_bar_time_is_green(self):
         clock = self.source("modules/bar/components/Clock.qml")
         icon = self.source("modules/bar/components/OsIcon.qml")
+        self.assertIn('text: "calendar_month"\n                color: Colours.accents.orange', clock)
+        self.assertIn("readonly property color colour: Colours.accents.green", clock)
+        self.assertEqual(4, clock.count("color: root.colour"))
         self.assertIn("color: Colours.accents.green", clock)
         self.assertIn("topColour: Colours.accents.blue", icon)
         self.assertIn("bottomColour: Colours.accents.blue", icon)
@@ -29,7 +32,21 @@ class BarAndObsTest(unittest.TestCase):
         self.assertIn("if (index >= root.previousAccentIndex)", workspaces)
         self.assertIn("accent: root.activeAccent", workspaces)
         self.assertIn("color: root.accent", indicator)
-        self.assertNotRegex(indicator, r"color:\s*Math.random\(")
+        self.assertIn("colorizationColor: Colours.accents.foregroundFor(root.accent)", indicator)
+
+    def test_workspace_accent_foregrounds_match_contrast_roles(self):
+        colours = self.source("services/Colours.qml")
+        indicator = self.source("modules/bar/components/workspaces/ActiveIndicator.qml")
+        self.assertIn("function foregroundFor(c: color): color", colours)
+        self.assertIn("Qt.colorEqual(c, red)", colours)
+        self.assertIn("Qt.colorEqual(c, purple)", colours)
+        self.assertIn("Qt.colorEqual(c, blue)", colours)
+        self.assertIn("Qt.colorEqual(c, orange)", colours)
+        self.assertNotIn("Qt.colorEqual(c, yellow)", colours)
+        self.assertNotIn("Qt.colorEqual(c, green)", colours)
+        self.assertIn("return whiteForeground;", colours)
+        self.assertIn("return darkForeground;", colours)
+        self.assertNotIn('colorizationColor: Qt.colorEqual(root.accent', indicator)
 
     def test_recording_list_uses_videos_and_includes_obs_formats(self):
         paths = self.source("utils/Paths.qml")

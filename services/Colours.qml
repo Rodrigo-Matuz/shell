@@ -179,6 +179,12 @@ Singleton {
         readonly property color orange: "#FF4D00"
         readonly property color yellow: "#FFFF87"
         readonly property color green: "#A4E400"
+
+        function foregroundFor(c: color): color {
+            if (Qt.colorEqual(c, red) || Qt.colorEqual(c, purple) || Qt.colorEqual(c, blue) || Qt.colorEqual(c, orange))
+                return whiteForeground;
+            return darkForeground;
+        }
     }
 
     component M3TPalette: QtObject {

@@ -71,7 +71,7 @@ StyledRect {
 
         source: root.mask
         sourceColor: Colours.palette.m3onSurface
-        colorizationColor: Qt.colorEqual(root.accent, Colours.accents.purple) || Qt.colorEqual(root.accent, Colours.accents.blue) ? "#FFFFFF" : "#050505"
+        colorizationColor: Colours.accents.foregroundFor(root.accent)
 
         x: 0
         y: -parent.start
