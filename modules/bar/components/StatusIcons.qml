@@ -99,7 +99,7 @@ StyledRect {
                         MaterialIcon {
                             animate: true
                             text: Icons.getMicVolumeIcon(Audio.sourceVolume, Audio.sourceMuted)
-                            color: Colours.accents.green
+                            color: Colours.accents.purple
                             fontStyle: Tokens.font.icon.medium
                             fill: 1
                         }

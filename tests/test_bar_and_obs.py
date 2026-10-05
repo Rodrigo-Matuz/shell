@@ -66,7 +66,7 @@ class BarAndObsTest(unittest.TestCase):
     def test_bar_status_icons_have_distinct_semantic_accents(self):
         status = self.source("modules/bar/components/StatusIcons.qml")
         expected = {
-            "audio": "orange", "microphone": "green",
+            "audio": "orange", "microphone": "purple",
             "kbLayout": "yellow", "network": "blue",
         }
         for role, accent in expected.items():
