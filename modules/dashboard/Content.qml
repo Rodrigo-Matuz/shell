@@ -31,6 +31,12 @@ Item {
                 enabled: Config.dashboard.showMedia
             },
             {
+                component: notesComponent,
+                iconName: "edit_note",
+                text: Tr.tr("Notes"),
+                enabled: true
+            },
+            {
                 component: performanceComponent,
                 iconName: "speed",
                 text: Tr.tr("Performance"),
@@ -167,6 +173,27 @@ Item {
 
                 Media {
                     screenState: root.screenState
+                }
+            }
+
+            Component {
+                id: notesComponent
+
+                Item {
+                    implicitWidth: notesLoader.item ? notesLoader.item.implicitWidth : 840
+                    implicitHeight: notesLoader.item ? notesLoader.item.implicitHeight : 480
+
+                    Loader {
+                        id: notesLoader
+                        anchors.fill: parent
+                        source: Qt.resolvedUrl("NotesTab.qml")
+                    }
+
+                    StyledText {
+                        anchors.centerIn: parent
+                        visible: notesLoader.status === Loader.Error
+                        text: Tr.tr("Notes failed to load. Rebuild or reinstall this shell package.")
+                    }
                 }
             }
 
