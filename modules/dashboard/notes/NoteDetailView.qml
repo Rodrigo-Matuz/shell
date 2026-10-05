@@ -33,6 +33,8 @@ StyledRect {
             case "tertiary": return Colours.palette.m3tertiary;
             case "pink": return Colours.palette.m3error;
             case "surface": return Colours.palette.m3outline;
+            case "green": return Colours.accents.green;
+            case "yellow": return Colours.accents.yellow;
             default: return Colours.palette.m3primary;
         }
     }
@@ -174,6 +176,7 @@ StyledRect {
                 IconButton {
                     icon: "arrow_back"
                     type: ButtonBase.Tonal
+                    inactiveOnColour: Colours.accents.purple
                     onClicked: root.handleBack()
                 }
 
@@ -215,6 +218,7 @@ StyledRect {
                         id: editToggleBtn
                         icon: root.isEditing ? "visibility" : "edit"
                         type: ButtonBase.Tonal
+                        inactiveOnColour: root.isEditing ? Colours.accents.orange : Colours.palette.m3onSecondaryContainer
                         onClicked: {
                             if (root.isEditing) {
                                 root.syncNow();
@@ -229,6 +233,8 @@ StyledRect {
                     IconButton {
                         icon: "push_pin"
                         type: root.localPinned ? ButtonBase.Filled : ButtonBase.Tonal
+                        inactiveColour: root.localPinned ? Colours.accents.blue : Colours.palette.m3secondaryContainer
+                        inactiveOnColour: root.localPinned ? Colours.accents.blueForeground : Colours.accents.blue
                         onClicked: {
                             root.localPinned = !root.localPinned;
                             root.syncNow();
@@ -238,10 +244,10 @@ StyledRect {
                     IconButton {
                         icon: root.confirmDelete ? "check" : "delete"
                         type: root.confirmDelete ? ButtonBase.Filled : ButtonBase.Tonal
-                        activeColour: root.confirmDelete ? Colours.palette.m3error : Colours.palette.m3secondary
-                        inactiveColour: root.confirmDelete ? Colours.palette.m3error : Colours.palette.m3secondaryContainer
-                        activeOnColour: root.confirmDelete ? Colours.palette.m3onError : Colours.palette.m3onSecondary
-                        inactiveOnColour: root.confirmDelete ? Colours.palette.m3onError : Colours.palette.m3onSecondaryContainer
+                        activeColour: Colours.accents.red
+                        inactiveColour: root.confirmDelete ? Colours.accents.red : Colours.palette.m3secondaryContainer
+                        activeOnColour: Colours.accents.whiteForeground
+                        inactiveOnColour: root.confirmDelete ? Colours.accents.whiteForeground : Colours.accents.red
                         onClicked: {
                             if (!root.confirmDelete) {
                                 root.confirmDelete = true;
@@ -269,7 +275,9 @@ StyledRect {
                             { id: "primary", color: Colours.palette.m3primary },
                             { id: "secondary", color: Colours.palette.m3secondary },
                             { id: "tertiary", color: Colours.palette.m3tertiary },
-                            { id: "pink", color: Colours.palette.m3error }
+                            { id: "pink", color: Colours.palette.m3error },
+                            { id: "green", color: Colours.accents.green },
+                            { id: "yellow", color: Colours.accents.yellow }
                         ]
 
                         delegate: CustomMouseArea {

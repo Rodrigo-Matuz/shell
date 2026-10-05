@@ -109,6 +109,8 @@ StyledRect {
                 IconButton {
                     icon: NotesStore.viewMode === "grid" ? "grid_view" : "view_list"
                     type: NotesStore.viewMode === "grid" ? ButtonBase.Filled : ButtonBase.Tonal
+                    inactiveColour: NotesStore.viewMode === "grid" ? Colours.accents.purple : Colours.palette.m3secondaryContainer
+                    inactiveOnColour: NotesStore.viewMode === "grid" ? Colours.accents.purpleForeground : Colours.accents.purple
                     onClicked: NotesStore.toggleViewMode()
                 }
 
@@ -116,6 +118,8 @@ StyledRect {
                 IconButton {
                     icon: "add"
                     type: ButtonBase.Filled
+                    inactiveColour: Colours.accents.yellow
+                    inactiveOnColour: Colours.accents.darkForeground
                     onClicked: NotesStore.createAndOpenNewNote()
                 }
             }

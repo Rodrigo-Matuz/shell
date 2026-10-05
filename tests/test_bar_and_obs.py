@@ -11,13 +11,14 @@ class BarAndObsTest(unittest.TestCase):
     def source(self, relative_path):
         return (ROOT / relative_path).read_text()
 
-    def test_calendar_icon_is_orange_and_bar_time_is_green(self):
+    def test_calendar_icon_and_date_are_neutral_and_bar_time_is_green(self):
         clock = self.source("modules/bar/components/Clock.qml")
         icon = self.source("modules/bar/components/OsIcon.qml")
-        self.assertIn('text: "calendar_month"\n                color: Colours.accents.orange', clock)
+        self.assertIn('text: "calendar_month"\n                color: Colours.palette.m3onSurface', clock)
+        self.assertIn('text: Time.format("ddd")\n                    font: Tokens.font.body.builders.small.scale(0.9).build()\n                    color: Colours.palette.m3onSurface', clock)
+        self.assertIn('text: Time.format("d")\n                    font: root.font.scale(1.1).build()\n                    color: Colours.palette.m3onSurface', clock)
         self.assertIn("readonly property color colour: Colours.accents.green", clock)
         self.assertEqual(4, clock.count("color: root.colour"))
-        self.assertIn("color: Colours.accents.green", clock)
         self.assertIn("topColour: Colours.accents.blue", icon)
         self.assertIn("bottomColour: Colours.accents.blue", icon)
         self.assertIn("colour: Colours.accents.blue", icon)

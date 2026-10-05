@@ -23,6 +23,8 @@ StyledRect {
             case "tertiary": return Colours.palette.m3tertiary;
             case "pink": return Colours.palette.m3error;
             case "surface": return Colours.palette.m3outline;
+            case "green": return Colours.accents.green;
+            case "yellow": return Colours.accents.yellow;
             default: return Colours.palette.m3primary;
         }
     }

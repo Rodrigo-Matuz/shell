@@ -20,6 +20,8 @@ Item {
 
     // Match tab identity rather than index: individual tabs may be disabled.
     function accentForTab(iconName: string): color {
+        if (iconName === "edit_note")
+            return Colours.accents.yellow;
         if (Colours.light)
             return Colours.palette.m3primary;
         switch (iconName) {

@@ -128,6 +128,8 @@ StyledRect {
                         visible: !root.showTrash
                         icon: NotesStore.todoSortMode === "date" ? "calendar_month" : "sort"
                         type: NotesStore.todoSortMode === "date" ? ButtonBase.Filled : ButtonBase.Tonal
+                        inactiveColour: NotesStore.todoSortMode === "date" ? Colours.accents.purple : Colours.palette.m3secondaryContainer
+                        inactiveOnColour: NotesStore.todoSortMode === "date" ? Colours.accents.purpleForeground : Colours.accents.purple
                         onClicked: NotesStore.toggleTodoSort()
                     }
 
@@ -136,8 +138,8 @@ StyledRect {
                         visible: root.showTrash && root.generalTrashCount > 0
                         icon: root.confirmEmptyTrash ? "check" : "delete_sweep"
                         type: root.confirmEmptyTrash ? ButtonBase.Filled : ButtonBase.Tonal
-                        inactiveColour: root.confirmEmptyTrash ? Colours.palette.m3error : Colours.palette.m3secondaryContainer
-                        inactiveOnColour: root.confirmEmptyTrash ? Colours.palette.m3onError : Colours.palette.m3onSecondaryContainer
+                        inactiveColour: root.confirmEmptyTrash ? Colours.accents.red : Colours.palette.m3secondaryContainer
+                        inactiveOnColour: root.confirmEmptyTrash ? Colours.accents.whiteForeground : Colours.accents.red
                         onClicked: {
                             if (!root.confirmEmptyTrash) {
                                 root.confirmEmptyTrash = true;
@@ -154,6 +156,7 @@ StyledRect {
                     IconButton {
                         icon: root.showTrash ? "checklist" : "delete_outline"
                         type: root.showTrash ? ButtonBase.Filled : ButtonBase.Tonal
+                        inactiveOnColour: root.showTrash ? Colours.palette.m3onPrimary : Colours.accents.red
                         onClicked: {
                             root.flushPendingActions();
                             root.confirmEmptyTrash = false;
@@ -439,7 +442,7 @@ StyledRect {
                                 Layout.alignment: Qt.AlignHCenter
                                 text: root.showTrash ? "auto_delete" : "check_circle"
                                 fontStyle: Tokens.font.icon.extraLarge
-                                color: Colours.palette.m3primary
+                                color: root.showTrash ? Colours.palette.m3primary : Colours.accents.green
                                 opacity: 0.8
                             }
 
