@@ -218,7 +218,7 @@ StyledRect {
                         id: editToggleBtn
                         icon: root.isEditing ? "visibility" : "edit"
                         type: ButtonBase.Tonal
-                        inactiveOnColour: root.isEditing ? Colours.accents.orange : Colours.palette.m3onSecondaryContainer
+                        inactiveOnColour: root.isEditing ? Colours.accents.orange : Colours.accents.purple
                         onClicked: {
                             if (root.isEditing) {
                                 root.syncNow();

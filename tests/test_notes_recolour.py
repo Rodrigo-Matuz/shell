@@ -45,7 +45,7 @@ class NotesRecolourTest(unittest.TestCase):
         back = section(editor, '// Left: Back button', 'TextField {')
         self.assertIn('inactiveOnColour: Colours.accents.purple', back)
         view = section(editor, 'id: editToggleBtn', 'IconButton {')
-        self.assertIn('inactiveOnColour: root.isEditing ? Colours.accents.orange : Colours.palette.m3onSecondaryContainer', view)
+        self.assertIn('inactiveOnColour: root.isEditing ? Colours.accents.orange : Colours.accents.purple', view)
         pin = section(editor, 'icon: "push_pin"', 'IconButton {')
         self.assertIn('inactiveOnColour: root.localPinned ? Colours.accents.blueForeground : Colours.accents.blue', pin)
         delete = section(editor, 'icon: root.confirmDelete ? "check" : "delete"', 'onClicked:')
@@ -65,11 +65,11 @@ class NotesRecolourTest(unittest.TestCase):
         icon = section(todo, 'text: root.showTrash ? "auto_delete" : "check_circle"', 'opacity: 0.8')
         self.assertIn('color: root.showTrash ? Colours.palette.m3primary : Colours.accents.green', icon)
 
-    def test_bar_date_icon_and_text_are_neutral_without_recoloring_time(self):
+    def test_bar_calendar_icon_is_green_date_text_neutral_and_time_unchanged(self):
         clock = (ROOT / "modules/bar/components/Clock.qml").read_text()
         date = clock.split('text: "calendar_month"', 1)[1].split('StyledRect {', 1)[0]
-        self.assertIn('color: Colours.palette.m3onSurface', date)
-        self.assertEqual(3, date.count('color: Colours.palette.m3onSurface'))
+        self.assertIn('color: Colours.accents.green', date)
+        self.assertEqual(2, date.count('color: Colours.palette.m3onSurface'))
         self.assertIn('readonly property color colour: Colours.accents.green', clock)
         self.assertIn('color: root.colour', clock)
 

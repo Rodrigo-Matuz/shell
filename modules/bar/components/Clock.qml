@@ -40,7 +40,7 @@ StyledRect {
 
             sourceComponent: MaterialIcon {
                 text: "calendar_month"
-                color: Colours.palette.m3onSurface
+                color: Colours.accents.green
             }
         }
 
