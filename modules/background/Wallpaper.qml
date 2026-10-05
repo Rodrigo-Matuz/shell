@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtMultimedia
 import Caelestia.Config
 import Caelestia.I18n
 import qs.components
@@ -13,26 +14,66 @@ Item {
     id: root
 
     property string source: Wallpapers.current
-    property CachingImage current
+    property bool playbackEnabled: true
+    property Item current
+    property Item previous
     property bool completed
 
-    onSourceChanged: {
-        if (!source)
-            current = null;
-        else
-            current = imgComp.createObject(this, {
-                path: source
-            });
+    function changeSource(): void {
+        retireTimer.stop();
+        fallbackRetireTimer.stop();
+        if (previous) {
+            previous.destroy();
+            previous = null;
+        }
+        previous = current;
+        // Never leave an old decoder playing under an incoming image/video.
+        if (previous?.stopPlayback)
+            previous.stopPlayback();
+        if (previous)
+            fallbackRetireTimer.restart();
+        current = source ? (Wallpapers.isVideo(source) ? videoComp : imgComp).createObject(root, { path: source }) : null;
+        if (!current)
+            retirePrevious();
     }
 
+    function retirePrevious(): void {
+        fallbackRetireTimer.stop();
+        if (previous) {
+            previous.destroy();
+            previous = null;
+        }
+    }
+
+    onSourceChanged: if (completed) changeSource()
+    onCurrentChanged: if (current?.ready) retireTimer.restart()
+
     Component.onCompleted: {
-        if (source)
-            Qt.callLater(() => {
-                current = imgComp.createObject(this, {
-                    path: source
-                });
-                completed = true;
-            });
+        completed = true;
+        changeSource();
+    }
+
+    Connections {
+        function onReadyChanged(): void {
+            if (root.current?.ready)
+                retireTimer.restart();
+        }
+
+        target: root.current
+    }
+
+    Timer {
+        id: retireTimer
+
+        interval: Tokens.anim.durations.expressiveSlowEffects
+        onTriggered: root.retirePrevious()
+    }
+
+    Timer {
+        id: fallbackRetireTimer
+
+        interval: 5000
+        onTriggered: root.retirePrevious()
     }
 
     Loader {
@@ -75,8 +116,8 @@ Item {
                             id: dialog
 
                             title: Tr.tr("Select a wallpaper")
-                            filterLabel: Tr.tr("Image files")
-                            filters: Images.validImageExtensions
+                            filterLabel: Tr.tr("Image and video files")
+                            filters: [...Images.validImageExtensions, ...Wallpapers.videoExtensions]
                             onAccepted: path => Wallpapers.setWallpaper(path)
                         }
 
@@ -107,6 +148,8 @@ Item {
         CachingImage {
             id: img
 
+            property bool ready: status === Image.Ready
+
             anchors.fill: parent
 
             opacity: 0
@@ -124,11 +167,73 @@ Item {
                 from: 0
                 to: 1
             }
+        }
+    }
 
-            Timer {
-                running: root.current !== img && root.current?.status === Image.Ready
-                interval: anim.duration
-                onTriggered: img.destroy()
+    Component {
+        id: videoComp
+
+        Item {
+            id: video
+
+            required property string path
+            readonly property bool ready: player.hasVideo || poster.status === Image.Ready
+
+            function stopPlayback(): void {
+                player.stop();
+                player.source = "";
+            }
+
+            anchors.fill: parent
+            opacity: 0
+            Component.onCompleted: if (root.playbackEnabled) player.play()
+            Component.onDestruction: stopPlayback()
+
+            // A still frame covers startup, paused playback and codec failures.
+            WallpaperImage {
+                id: poster
+
+                anchors.fill: parent
+                path: video.path
+            }
+
+            VideoOutput {
+                id: output
+
+                anchors.fill: parent
+                fillMode: VideoOutput.PreserveAspectCrop
+                visible: player.hasVideo
+            }
+
+            MediaPlayer {
+                id: player
+
+                source: Qt.resolvedUrl("file://" + encodeURIComponent(video.path).replace(/%2F/gi, "/"))
+                videoOutput: output
+                loops: MediaPlayer.Infinite
+                onErrorOccurred: (error, errorString) => console.warn("Wallpaper video:", errorString)
+
+                audioOutput: AudioOutput { muted: true }
+            }
+
+            Connections {
+                function onPlaybackEnabledChanged(): void {
+                    if (root.current !== video)
+                        return;
+                    if (root.playbackEnabled)
+                        player.play();
+                    else
+                        player.pause();
+                }
+
+                target: root
+            }
+
+            Anim on opacity {
+                type: Anim.SlowEffects
+                running: video.ready
+                from: 0
+                to: 1
             }
         }
     }

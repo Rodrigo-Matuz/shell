@@ -125,7 +125,16 @@ Singleton {
     ImageAnalyser {
         id: analyser
 
-        source: Wallpapers.current
+        source: Wallpapers.thumbnailForCurrent
+    }
+
+    Connections {
+        function onThumbnailRevisionChanged(): void {
+            if (!Wallpapers.showPreview && Wallpapers.isVideo(Wallpapers.actualCurrent))
+                analyser.requestUpdate();
+        }
+
+        target: Wallpapers
     }
 
     Timer {

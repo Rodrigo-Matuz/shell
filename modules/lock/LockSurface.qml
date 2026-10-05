@@ -187,8 +187,16 @@ WlSessionLockSurface {
     Component {
         id: wallpaperBackground
 
-        CachingImage {
-            path: Wallpapers.current
+        Item {
+            CachingImage {
+                anchors.fill: parent
+                path: Wallpapers.isVideo(Wallpapers.current) ? "" : Wallpapers.current
+            }
+            WallpaperImage {
+                anchors.fill: parent
+                visible: Wallpapers.isVideo(Wallpapers.current)
+                path: visible ? Wallpapers.current : ""
+            }
         }
     }
 

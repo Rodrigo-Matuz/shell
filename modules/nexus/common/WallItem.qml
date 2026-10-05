@@ -6,12 +6,13 @@ import Quickshell
 import Caelestia.Config
 import qs.components
 import qs.components.controls
+import qs.components.images
 import qs.services
 
 Item {
     id: root
 
-    property alias source: img.source
+    property alias source: img.path
     property alias text: label.text
     property alias radius: imgWrapper.radius
     property alias imgHeight: imgWrapper.implicitHeight
@@ -65,7 +66,7 @@ Item {
                 }
             }
 
-            Image {
+            WallpaperImage {
                 id: img
 
                 anchors.fill: parent

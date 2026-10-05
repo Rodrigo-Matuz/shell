@@ -115,7 +115,7 @@ PageBase {
 
                     interval: 100
                     onTriggered: {
-                        if (wallImg.status !== Image.Ready)
+                        if ((Wallpapers.isVideo(Wallpapers.current) ? videoWallImg.status : wallImg.status) !== Image.Ready)
                             wallIndicatorLoader.opacity = 1;
                     }
                 }
@@ -124,7 +124,7 @@ PageBase {
                     id: wallImg
 
                     anchors.fill: parent
-                    source: Wallpapers.current
+                    source: Wallpapers.isVideo(Wallpapers.current) ? "" : Wallpapers.current
                     preventInit: wallIndicatorLoader.opacity > 0
                     fadeOutAnim: Anim.DefaultEffects
                     fadeInAnim: Anim.SlowEffects
@@ -135,6 +135,28 @@ PageBase {
                         if (status === Image.Ready) {
                             wallLoadDebounceTimer.stop();
                             wallIndicatorLoader.opacity = 0;
+                        }
+                    }
+                }
+
+                WallpaperImage {
+                    id: videoWallImg
+
+                    anchors.fill: parent
+                    visible: Wallpapers.isVideo(Wallpapers.current)
+                    path: visible ? Wallpapers.current : ""
+                    opacity: status === Image.Ready ? 1 : 0
+                    onPathChanged: wallLoadDebounceTimer.restart()
+                    onStatusChanged: {
+                        if (status === Image.Ready) {
+                            wallLoadDebounceTimer.stop();
+                            wallIndicatorLoader.opacity = 0;
+                        }
+                    }
+
+                    Behavior on opacity {
+                        Anim {
+                            type: Anim.SlowEffects
                         }
                     }
                 }

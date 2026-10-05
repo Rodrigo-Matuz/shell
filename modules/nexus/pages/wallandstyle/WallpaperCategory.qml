@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Caelestia.Config
+import Caelestia.I18n
 import Caelestia.Models
 import qs.services
 import qs.modules.nexus.common
@@ -12,7 +13,7 @@ PageBase {
 
     title: {
         const c = nState.selectedWallpaperCategory;
-        return c.slice(0, 1).toUpperCase() + c.slice(1);
+        return c === "Live wallpapers" ? Tr.tr("Live wallpapers") : c.slice(0, 1).toUpperCase() + c.slice(1);
     }
     isSubPage: true
 

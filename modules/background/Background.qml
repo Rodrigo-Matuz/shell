@@ -47,7 +47,9 @@ Variants {
                 anchors.fill: parent
                 active: Config.background.wallpaperEnabled
 
-                sourceComponent: Wallpaper {}
+                sourceComponent: Wallpaper {
+                    playbackEnabled: !GameMode.enabled && !(Hypr.monitorFor(win.modelData)?.activeWorkspace?.toplevels?.values?.some(t => t.lastIpcObject?.fullscreen > 1) ?? false)
+                }
             }
 
             Visualiser {

@@ -20,6 +20,7 @@ Singleton {
     readonly property string imagecache: `${cache}/imagecache`
     readonly property string notifimagecache: `${imagecache}/notifs`
     readonly property string wallsdir: Quickshell.env("CAELESTIA_WALLPAPERS_DIR") || absolutePath(GlobalConfig.paths.wallpaperDir)
+    readonly property string livewallsdir: absolutePath(Quickshell.env("CAELESTIA_LIVE_WALLPAPERS_DIR") || `${home}/Pictures/Live-Wallpapers`)
     readonly property string recsdir: Quickshell.env("CAELESTIA_RECORDINGS_DIR") || videos
     readonly property string libdir: Quickshell.env("CAELESTIA_LIB_DIR") || "/usr/lib/caelestia"
 

@@ -24,7 +24,8 @@ This fork keeps the upstream Quickshell architecture and functionality while app
 - Recolored the lock screen: weather, clock/date, password controls, system/fetch card, media controls, resource metrics, and notification heading.
 - Recolored the notifications and control-center utility cards, including Keep Awake, recording, quick toggles, and neutral notification content.
 - Added shell-side controls for the forked CLI's explicit OBS backend, including status reconciliation, start/stop/pause controls, recording paths, and safe recording-list behavior.
-- Preserved the legacy recorder behavior as the default and avoided changing wallpapers, glass surfaces, transparency, blur, layout, typography, animations, authentication, notification behavior, media artwork, or system-monitor logic unless required by the feature.
+- Added muted, looping video wallpapers with still thumbnails, picker/gallery integration and per-screen playback suspension for fullscreen apps and game mode. Videos are discovered in `~/Pictures/Live-Wallpapers` (override with `CAELESTIA_LIVE_WALLPAPERS_DIR`), and the existing image gallery stays available. Inspiration and credit: [Caelestia Live Wallpapers Integration](https://github.com/SunnydeuS/Caelestia-Live-Wallpapers-Integration); no code was copied from it.
+- Preserved the legacy recorder behavior as the default and avoided changing glass surfaces, transparency, blur, layout, typography, animations, authentication, notification behavior, media artwork, or system-monitor logic unless required by the feature.
 
 The shell and CLI forks are intended to be used together. The corresponding personal CLI fork is documented in its own README.
 

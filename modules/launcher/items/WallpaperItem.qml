@@ -66,7 +66,19 @@ Item {
 
         CachingImage {
             anchors.fill: parent
-            path: root.modelData.path
+            path: Wallpapers.isVideo(root.modelData.path) ? "" : root.modelData.path
+            visible: !Wallpapers.isVideo(root.modelData.path)
+            smooth: !root.PathView.view.moving
+            sourceSize: {
+                const dpr = (QsWindow.window as QsWindow)?.devicePixelRatio ?? 1;
+                return Qt.size(image.implicitWidth * dpr, image.implicitHeight * dpr);
+            }
+        }
+
+        WallpaperImage {
+            anchors.fill: parent
+            visible: Wallpapers.isVideo(root.modelData.path)
+            path: visible ? root.modelData.path : ""
             smooth: !root.PathView.view.moving
             sourceSize: {
                 const dpr = (QsWindow.window as QsWindow)?.devicePixelRatio ?? 1;

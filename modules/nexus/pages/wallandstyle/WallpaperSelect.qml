@@ -44,9 +44,9 @@ PageBase {
                 FileDialog {
                     id: browseDialog
 
-                    title: Tr.tr("Select an image")
-                    filterLabel: Tr.tr("Image files")
-                    filters: Images.validImageExtensions
+                    title: Tr.tr("Select a wallpaper")
+                    filterLabel: Tr.tr("Image and video files")
+                    filters: [...Images.validImageExtensions, ...Wallpapers.videoExtensions]
                     onAccepted: path => {
                         Wallpapers.setWallpaper(path);
                         root.nState.closeSubPage();
@@ -134,6 +134,8 @@ PageBase {
 
                         if (modelData.parentDir !== Paths.wallsdir) {
                             const category = Wallpapers.getCategoryFor(modelData);
+                            if (Wallpapers.isVideo(modelData.path))
+                                return Tr.tr("Live wallpapers");
                             return category.slice(0, 1).toUpperCase() + category.slice(1);
                         }
                         return modelData.name;
