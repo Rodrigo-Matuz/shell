@@ -148,7 +148,14 @@ Searcher {
         recursive: true
         path: Paths.livewallsdir
         filter: FileSystemModel.Files
-        nameFilters: root.videoExtensions.flatMap(ext => [`*.${ext}`, `*.${ext.toUpperCase()}`])
+        nameFilters: {
+            const patterns = [];
+            for (let i = 0; i < root.videoExtensions.length; ++i) {
+                const ext = root.videoExtensions[i];
+                patterns.push(`*.${ext}`, `*.${ext.toUpperCase()}`);
+            }
+            return patterns;
+        }
     }
 
     FileView {

@@ -51,6 +51,12 @@ class LiveWallpaperTests(unittest.TestCase):
         self.assertNotRegex(service, r"actualCurrent = path;\s*if \(isVideo\(path\)\)")
         self.assertRegex(service, r"onExited: code => \{[\s\S]*?code === 0[\s\S]*?root\.thumbnailRevision")
 
+    def test_live_directory_filters_do_not_call_js_flatmap_on_qml_list(self):
+        service = source("services/Wallpapers.qml")
+        self.assertNotIn("videoExtensions.flatMap", service)
+        self.assertIn("nameFilters:", service)
+        self.assertIn("*.${ext.toUpperCase()}", service)
+
     def test_video_thumbnails_used_by_colour_preview_lock_and_picker(self):
         service = source("services/Wallpapers.qml")
         self.assertIn('"--thumbnail-info"', service)
