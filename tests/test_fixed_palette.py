@@ -20,6 +20,17 @@ class PaletteTest(unittest.TestCase):
         }.items():
             self.assertRegex(colours, rf"readonly property color {name}: \"#{hex_value}\"")
 
+    def test_matuz_dark_surfaces_keep_cards_close_to_the_background(self):
+        colours = (ROOT / "services/Colours.qml").read_text()
+        self.assertIn('scheme.name === "matuz" && scheme.mode === "dark"', colours)
+        surfaces = colours[colours.index('scheme.name === "matuz" && scheme.mode === "dark"'):colours.index('for (const [name, colour]', colours.index('scheme.name === "matuz" && scheme.mode === "dark"'))]
+        for role, value in {
+            "background": "050505", "surface": "050505",
+            "surfaceContainerLow": "0A0A0A", "surfaceContainer": "101010",
+            "surfaceContainerHigh": "151515", "surfaceContainerHighest": "191919",
+        }.items():
+            self.assertIn(f'{role}: "{value}"', surfaces)
+
     def test_dashboard_tabs_use_semantic_fixed_accents(self):
         tabs = (ROOT / "modules/dashboard/Tabs.qml").read_text()
         for role in ("purple", "red", "orange", "blue"):

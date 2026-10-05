@@ -73,6 +73,23 @@ Singleton {
             previewLight = scheme.mode === "light";
         }
 
+        // Keep the Matuz dark scheme's cards quieter than its #050505 background.
+        // Override the generated scheme here so updating only the shell flake is enough.
+        if (scheme.name === "matuz" && scheme.mode === "dark") {
+            Object.assign(scheme.colours, {
+                background: "050505",
+                surface: "050505",
+                surfaceDim: "050505",
+                surfaceContainerLowest: "050505",
+                surfaceContainerLow: "0A0A0A",
+                surfaceContainer: "101010",
+                surfaceContainerHigh: "151515",
+                surfaceContainerHighest: "191919",
+                surfaceBright: "191919",
+                surfaceVariant: "191919"
+            });
+        }
+
         for (const [name, colour] of Object.entries(scheme.colours)) {
             const propName = name.startsWith("term") ? name : `m3${name}`;
             if (colours.hasOwnProperty(propName))

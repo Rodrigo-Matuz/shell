@@ -24,7 +24,7 @@ ColumnLayout {
 
     StyledText {
         Layout.fillWidth: true
-        text: Notifs.list.length > 0 ? Tr.trN("%n notification", "%n notifications", Notifs.list.length) : Tr.tr("Notifications")
+        text: Tr.tr("Notifications")
         color: Colours.palette.m3onSurface
         font: Tokens.font.mono.builders.small.weight(Font.Medium).build()
         elide: Text.ElideRight

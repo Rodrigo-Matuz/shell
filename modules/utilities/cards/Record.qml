@@ -47,7 +47,7 @@ StyledRect {
                 }
 
                 radius: Tokens.rounding.full
-                color: Recorder.running ? Colours.palette.m3secondary : Colours.palette.m3secondaryContainer
+                color: Recorder.running ? Colours.accents.whiteForeground : Colours.palette.m3secondaryContainer
 
                 MaterialIcon {
                     id: icon

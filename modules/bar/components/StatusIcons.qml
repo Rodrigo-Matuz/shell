@@ -84,7 +84,7 @@ StyledRect {
                         MaterialIcon {
                             animate: true
                             text: Icons.getVolumeIcon(Audio.volume, Audio.muted)
-                            color: root.colour
+                            color: Colours.accents.orange
                             fontStyle: Tokens.font.icon.medium
                             fill: 1
                         }
@@ -99,7 +99,7 @@ StyledRect {
                         MaterialIcon {
                             animate: true
                             text: Icons.getMicVolumeIcon(Audio.sourceVolume, Audio.sourceMuted)
-                            color: root.colour
+                            color: Colours.accents.green
                             fontStyle: Tokens.font.icon.medium
                             fill: 1
                         }
@@ -111,7 +111,7 @@ StyledRect {
                         StyledText {
                             animate: true
                             text: Hypr.kbLayout
-                            color: root.colour
+                            color: Colours.accents.yellow
                             font: Tokens.font.mono.medium
                         }
                     }
@@ -122,7 +122,7 @@ StyledRect {
                         MaterialIcon {
                             animate: true
                             text: Nmcli.activeEthernet ? "cable" : Nmcli.active ? Icons.getNetworkIcon(Nmcli.active.strength ?? 0) : "wifi_off"
-                            color: root.colour
+                            color: Colours.accents.blue
                         }
                     }
                 }

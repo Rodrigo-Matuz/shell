@@ -14,7 +14,7 @@ Searcher {
     readonly property string currentNamePath: `${Paths.state}/wallpaper/path.txt`
     readonly property list<string> smartArg: GlobalConfig.services.smartScheme ? [] : ["--no-smart"]
     readonly property string fallback: Quickshell.shellPath("assets/wallpaper.webp")
-    readonly property list<string> videoExtensions: ["mp4", "mkv", "webm"]
+    readonly property list<string> videoExtensions: ["mp4", "mkv", "webm", "mov", "m4v", "avi", "flv", "ts", "mts", "m2ts", "ogv"]
     readonly property string thumbnailPath: `${Paths.state}/wallpaper/thumbnail.jpg`
     property int thumbnailRevision
     readonly property string thumbnailUrl: `file://${thumbnailPath}?revision=${thumbnailRevision}`
@@ -29,7 +29,7 @@ Searcher {
     property bool pendingPreviewClear
 
     function isVideo(path: string): bool {
-        return /\.(mp4|mkv|webm)$/i.test(path);
+        return /\.(mp4|mkv|webm|mov|m4v|avi|flv|ts|mts|m2ts|ogv)$/i.test(path);
     }
 
     function getCategoryFor(w: FileSystemEntry): string {

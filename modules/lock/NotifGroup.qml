@@ -99,7 +99,7 @@ StyledRect {
                 id: materialIconComp
 
                 MaterialIcon {
-                    text: Icons.getNotifIcon(root.notifs[0]?.summary, root.urgency)
+                    text: "notifications"
                     color: root.urgency === "critical" ? Colours.palette.m3onError : root.urgency === "low" ? Colours.palette.m3onSurface : Colours.palette.m3onSecondaryContainer
                     fontStyle: Tokens.font.icon.large
                 }
@@ -113,7 +113,7 @@ StyledRect {
                 Loader {
                     asynchronous: true
                     anchors.centerIn: parent
-                    sourceComponent: root.image ? imageComp : root.appIcon ? appIconComp : materialIconComp
+                    sourceComponent: root.appIcon ? appIconComp : materialIconComp
                 }
             }
 
@@ -121,7 +121,7 @@ StyledRect {
                 asynchronous: true
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                active: root.appIcon && root.image
+                active: false
 
                 sourceComponent: StyledRect {
                     implicitWidth: Tokens.sizes.notifs.badge
@@ -156,12 +156,13 @@ StyledRect {
                     Layout.fillWidth: true
                     text: root.modelData
                     color: Colours.palette.m3onSurfaceVariant
-                    font: Tokens.font.body.small
+                    font: Tokens.font.title.medium
                     elide: Text.ElideRight
                 }
 
                 StyledText {
                     animate: true
+                    visible: false
                     text: root.notifs[0]?.timeStr ?? ""
                     color: Colours.palette.m3outline
                     font: Tokens.font.body.small
@@ -174,8 +175,8 @@ StyledRect {
                     color: root.urgency === "critical" ? Colours.palette.m3error : Colours.layer(Colours.palette.m3surfaceContainerHighest, 2)
                     radius: Tokens.rounding.full
 
-                    opacity: root.notifs.length > Config.notifs.groupPreviewNum ? 1 : 0
-                    Layout.preferredWidth: root.notifs.length > Config.notifs.groupPreviewNum ? implicitWidth : 0
+                    opacity: 0
+                    Layout.preferredWidth: 0
 
                     StateLayer {
                         color: root.urgency === "critical" ? Colours.palette.m3onError : Colours.palette.m3onSurface
@@ -219,9 +220,7 @@ StyledRect {
             }
 
             Repeater {
-                model: ScriptModel {
-                    values: root.notifs.slice(0, root.Config.notifs.groupPreviewNum) as Array
-                }
+                model: []
 
                 NotifLine {
                     id: notif
@@ -278,9 +277,9 @@ StyledRect {
                 asynchronous: true
                 Layout.fillWidth: true
 
-                opacity: root.expanded ? 1 : 0
-                Layout.preferredHeight: root.expanded ? implicitHeight : 0
-                active: opacity > 0
+                opacity: 0
+                Layout.preferredHeight: 0
+                active: false
 
                 sourceComponent: ColumnLayout {
                     Repeater {

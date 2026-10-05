@@ -62,6 +62,32 @@ class BarAndObsTest(unittest.TestCase):
         self.assertIn("import qs.utils", card)
         self.assertIn("allowDelete: true", card)
 
+    def test_bar_status_icons_have_distinct_semantic_accents(self):
+        status = self.source("modules/bar/components/StatusIcons.qml")
+        expected = {
+            "audio": "orange", "microphone": "green",
+            "kbLayout": "yellow", "network": "blue",
+        }
+        for role, accent in expected.items():
+            with self.subTest(role=role):
+                entry = status[status.index(f'roleValue: "{role}"'):]
+                entry = entry[:entry.index('DelegateChoice {')]
+                self.assertIn(f'color: Colours.accents.{accent}', entry)
+        self.assertIn('color: Colours.tPalette.m3surfaceContainer', status)
+
+    def test_recording_header_is_white_with_red_icon_and_pause_stays_tonal(self):
+        card = self.source("modules/utilities/cards/Record.qml")
+        header = card[card.index('id: btnLayout'):card.index('text: Tr.tr("Screen recorder")')]
+        self.assertIn("color: Recorder.running ? Colours.accents.whiteForeground : Colours.palette.m3secondaryContainer", header)
+        self.assertIn('text: "screen_record"', header)
+        self.assertIn('Colours.accents.red', header)
+        pause = card[card.index('icon: Recorder.paused ? "play_arrow"'):card.index('onClicked: Recorder.togglePause()')]
+        self.assertIn('type: IconButton.Tonal', pause)
+        self.assertNotIn('activeColour: Colours.accents.whiteForeground', pause)
+        self.assertNotIn('inactiveColour: Colours.accents.whiteForeground', pause)
+        self.assertNotIn('activeOnColour: Colours.accents.red', pause)
+        self.assertNotIn('inactiveOnColour: Colours.accents.red', pause)
+
     def test_recorder_uses_obs_status_not_legacy_pid(self):
         recorder = self.source("services/Recorder.qml")
         card = self.source("modules/utilities/cards/Record.qml")
