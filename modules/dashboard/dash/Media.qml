@@ -14,6 +14,17 @@ import qs.utils
 Item {
     id: root
 
+    property bool showMusic: false
+    readonly property bool callVisible: DiscordVoice.connected && !showMusic
+
+    Connections {
+        target: DiscordVoice
+        function onConnectedChanged(): void {
+            if (!DiscordVoice.connected)
+                root.showMusic = false;
+        }
+    }
+
     property real playerProgress: {
         const active = Players.active;
         return active?.length ? (active.position % active.length) / active.length : 0;
@@ -45,6 +56,7 @@ Item {
 
     CircularProgress {
         id: prog
+        visible: !root.callVisible
 
         anchors.centerIn: cover
         implicitSize: cover.width + root.arcCoverGap + thickness * 2
@@ -64,6 +76,7 @@ Item {
 
     CoverArt {
         id: cover
+        visible: !root.callVisible
 
         anchors.top: parent.top
         anchors.left: parent.left
@@ -74,6 +87,7 @@ Item {
 
     StyledText {
         id: title
+        visible: !root.callVisible
 
         anchors.top: cover.bottom
         anchors.horizontalCenter: parent.horizontalCenter
@@ -91,6 +105,7 @@ Item {
 
     StyledText {
         id: album
+        visible: !root.callVisible
 
         anchors.top: title.bottom
         anchors.horizontalCenter: parent.horizontalCenter
@@ -108,6 +123,7 @@ Item {
 
     StyledText {
         id: artist
+        visible: !root.callVisible
 
         anchors.top: album.bottom
         anchors.horizontalCenter: parent.horizontalCenter
@@ -124,6 +140,7 @@ Item {
 
     ButtonRow {
         id: controls
+        visible: !root.callVisible
 
         anchors.top: artist.bottom
         anchors.left: parent.left
@@ -168,6 +185,7 @@ Item {
 
     AnimatedImage {
         id: bongocat
+        visible: !root.callVisible
 
         anchors.top: controls.bottom
         anchors.bottom: parent.bottom
@@ -182,5 +200,20 @@ Item {
         source: Paths.absolutePath(Config.paths.mediaGif)
         asynchronous: true
         fillMode: AnimatedImage.PreserveAspectFit
+    }
+
+    VoiceCall {
+        anchors.fill: parent
+        visible: root.callVisible
+        onShowMusicRequested: root.showMusic = true
+    }
+
+    IconButton {
+        visible: DiscordVoice.connected && root.showMusic
+        anchors.top: parent.top
+        anchors.right: parent.right
+        z: 2
+        icon: "call"
+        onClicked: root.showMusic = false
     }
 }

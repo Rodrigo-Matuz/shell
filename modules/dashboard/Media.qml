@@ -5,12 +5,23 @@ import M3Shapes
 import Caelestia.Config
 import Caelestia.I18n
 import qs.components
+import qs.components.controls
 import qs.services
 
 Item {
     id: root
 
     required property ScreenState screenState
+    property bool showMusic: false
+    readonly property bool callVisible: DiscordVoice.connected && !showMusic
+
+    Connections {
+        target: DiscordVoice
+        function onConnectedChanged(): void {
+            if (!DiscordVoice.connected)
+                root.showMusic = false;
+        }
+    }
 
     implicitWidth: Tokens.sizes.dashboard.mediaTabWidth
     implicitHeight: Tokens.sizes.dashboard.mediaTabHeight
@@ -25,11 +36,13 @@ Item {
         spacing: Tokens.spacing.extraLarge
 
         CoverVisualiser {
+            visible: !root.callVisible
             Layout.fillHeight: true
             implicitWidth: Tokens.sizes.dashboard.mediaSectionWidth
         }
 
         Item {
+            visible: !root.callVisible
             Layout.fillWidth: true
             Layout.fillHeight: true
 
@@ -148,5 +161,22 @@ Item {
                 }
             }
         }
+
+        VoiceCall {
+            visible: root.callVisible
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            onShowMusicRequested: root.showMusic = true
+        }
+    }
+
+    IconButton {
+        visible: DiscordVoice.connected && root.showMusic
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: Tokens.padding.large
+        z: 2
+        icon: "call"
+        onClicked: root.showMusic = false
     }
 }
