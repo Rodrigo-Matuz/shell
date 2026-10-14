@@ -137,6 +137,15 @@ class DashboardAccentRolesTest(unittest.TestCase):
         for accent in ("red", "purple", "blue", "orange", "yellow", "green"):
             self.assertIn(f"color: Colours.accents.{accent}", details)
 
+    def test_window_move_workspace_numbers_cycle_fixed_accents_and_float_is_purple(self):
+        buttons = (DASH.parents[1] / "modules/windowinfo/Buttons.qml").read_text()
+        workspace = buttons.split('Repeater {', 1)[1].split('RowLayout {', 1)[0]
+        self.assertIn('readonly property var workspaceAccents: [Colours.accents.red, Colours.accents.orange, Colours.accents.yellow, Colours.accents.green, Colours.accents.blue, Colours.accents.purple]', buttons)
+        self.assertIn('onColor: root.workspaceAccents[index % root.workspaceAccents.length]', workspace)
+        float_button = buttons.split('text: root.client?.lastIpcObject.floating', 1)[0].rsplit('        Button {', 1)[1]
+        self.assertIn('onColor: Colours.accents.purple', float_button)
+        self.assertIn('color: Colours.palette.m3secondaryContainer', float_button)
+
     def test_accent_property_names_cannot_be_qml_on_signal_handlers(self):
         colours = (DASH.parents[1] / "services/Colours.qml").read_text()
         self.assertNotRegex(colours, r'property\s+color\s+on[A-Z]')

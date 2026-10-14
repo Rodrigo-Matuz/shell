@@ -12,6 +12,7 @@ ColumnLayout {
 
     required property var client
     property bool moveToWsExpanded
+    readonly property var workspaceAccents: [Colours.accents.red, Colours.accents.orange, Colours.accents.yellow, Colours.accents.green, Colours.accents.blue, Colours.accents.purple]
 
     anchors.fill: parent
     spacing: Tokens.spacing.small
@@ -100,7 +101,7 @@ ColumnLayout {
                 }
 
                 color: isCurrent ? Colours.tPalette.m3surfaceContainerHighest : Colours.palette.m3tertiaryContainer
-                onColor: isCurrent ? Colours.palette.m3onSurface : Colours.palette.m3onTertiaryContainer
+                onColor: root.workspaceAccents[index % root.workspaceAccents.length]
                 text: wsId
                 disabled: isCurrent
             }
@@ -117,7 +118,7 @@ ColumnLayout {
 
         Button {
             color: Colours.palette.m3secondaryContainer
-            onColor: Colours.palette.m3onSecondaryContainer
+            onColor: Colours.accents.purple
             text: root.client?.lastIpcObject.floating ? Tr.tr("Tile") : Tr.tr("Float")
             onClicked: Hypr.dispatch(Hypr.usingLua ? `hl.dsp.window.float({ window = "address:0x${root.client?.address}" })` : `togglefloating address:0x${root.client?.address}`)
         }
