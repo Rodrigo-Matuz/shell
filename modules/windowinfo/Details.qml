@@ -49,27 +49,28 @@ ColumnLayout {
                 return Tr.trCtx("Address: %1", "window address").arg(`0x${addr}`);
             return Tr.trCtx("Address: unknown", "window address");
         }
-        color: Colours.palette.m3primary
+        color: Colours.accents.blue
     }
 
     Detail {
         icon: "location_searching"
         // TRANSLATORS: %1/%2 = x and y position in pixels
         text: Tr.tr("Position: %1, %2").arg(root.client?.lastIpcObject.at[0] ?? -1).arg(root.client?.lastIpcObject.at[1] ?? -1)
+        color: Colours.accents.green
     }
 
     Detail {
         icon: "resize"
         // TRANSLATORS: %1/%2 = width and height in pixels; the x is a multiplication sign
         text: Tr.tr("Size: %1 x %2").arg(root.client?.lastIpcObject.size[0] ?? -1).arg(root.client?.lastIpcObject.size[1] ?? -1)
-        color: Colours.palette.m3tertiary
+        color: Colours.accents.orange
     }
 
     Detail {
         icon: "workspaces"
         // TRANSLATORS: %1 = workspace name, %2 = workspace id
         text: Tr.tr("Workspace: %1 (%2)").arg(root.client?.workspace.name ?? -1).arg(root.client?.workspace.id ?? -1)
-        color: Colours.palette.m3secondary
+        color: Colours.accents.purple
     }
 
     Detail {
@@ -81,6 +82,7 @@ ColumnLayout {
                 return Tr.tr("Monitor: %1 (%2) at %3, %4").arg(mon.name).arg(mon.id).arg(mon.x).arg(mon.y);
             return Tr.tr("Monitor: unknown");
         }
+        color: Colours.accents.yellow
     }
 
     Detail {
@@ -91,7 +93,7 @@ ColumnLayout {
                 return Tr.tr("Initial title: %1").arg(title);
             return Tr.tr("Initial title: unknown");
         }
-        color: Colours.palette.m3tertiary
+        color: Colours.accents.green
     }
 
     Detail {
@@ -102,30 +104,32 @@ ColumnLayout {
                 return Tr.tr("Initial class: %1").arg(cls);
             return Tr.tr("Initial class: unknown");
         }
+        color: Colours.accents.red
     }
 
     Detail {
         icon: "account_tree"
         // TRANSLATORS: %1 = process id
         text: Tr.tr("Process id: %1").arg(String(root.client?.lastIpcObject.pid ?? -1))
-        color: Colours.palette.m3primary
+        color: Colours.accents.blue
     }
 
     Detail {
         icon: "picture_in_picture_center"
         text: root.client?.lastIpcObject.floating ? Tr.tr("Floating: yes") : Tr.tr("Floating: no")
-        color: Colours.palette.m3secondary
+        color: Colours.accents.purple
     }
 
     Detail {
         icon: "gradient"
         text: root.client?.lastIpcObject.xwayland ? Tr.tr("Xwayland: yes") : Tr.tr("Xwayland: no")
+        color: Colours.accents.red
     }
 
     Detail {
         icon: "keep"
         text: root.client?.lastIpcObject.pinned ? Tr.tr("Pinned: yes") : Tr.tr("Pinned: no")
-        color: Colours.palette.m3secondary
+        color: Colours.accents.yellow
     }
 
     Detail {
@@ -140,7 +144,7 @@ ColumnLayout {
                 return Tr.tr("Fullscreen state: on");
             return Tr.tr("Fullscreen state: unknown");
         }
-        color: Colours.palette.m3tertiary
+        color: Colours.accents.red
     }
 
     Item {

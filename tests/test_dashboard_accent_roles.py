@@ -117,6 +117,26 @@ class DashboardAccentRolesTest(unittest.TestCase):
         self.assertIn('activeOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.purpleForeground', media)
         self.assertIn('inactiveOnColour: Colours.light ? Colours.palette.m3onPrimary : Colours.accents.purpleForeground', media)
 
+    def test_no_media_icon_uses_fixed_green_accent(self):
+        media = (DASH / "Media.qml").read_text()
+        no_media = media.split('id: noMedia', 1)[1].split('Loader {', 1)[0]
+        self.assertIn('text: "queue_music"', no_media)
+        self.assertIn('color: Colours.accents.green', no_media)
+        self.assertNotIn('color: Colours.palette.m3onPrimaryContainer', no_media)
+
+    def test_storage_selector_keeps_disk_feature_orange(self):
+        storage = (DASH / "performance/StorageCard.qml").read_text()
+        self.assertIn('readonly property color accent: Colours.accents.orange', storage)
+        selector = storage.split('SplitButton {', 1)[1].split('Variants {', 1)[0]
+        self.assertIn('textColour: root.accent', selector)
+
+    def test_window_details_use_all_fixed_accent_roles(self):
+        details = (DASH.parents[1] / "modules/windowinfo/Details.qml").read_text()
+        for accent in ("red", "purple", "green", "yellow"):
+            self.assertIn(f"Colours.accents.{accent}", details)
+        for accent in ("red", "purple", "blue", "orange", "yellow", "green"):
+            self.assertIn(f"color: Colours.accents.{accent}", details)
+
     def test_accent_property_names_cannot_be_qml_on_signal_handlers(self):
         colours = (DASH.parents[1] / "services/Colours.qml").read_text()
         self.assertNotRegex(colours, r'property\s+color\s+on[A-Z]')

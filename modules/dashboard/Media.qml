@@ -122,7 +122,7 @@ Item {
                             anchors.centerIn: parent
                             text: "queue_music"
                             fontStyle: Tokens.font.icon.builders.large.scale(2).build()
-                            color: Colours.palette.m3onPrimaryContainer
+                            color: Colours.accents.green
                         }
                     }
 

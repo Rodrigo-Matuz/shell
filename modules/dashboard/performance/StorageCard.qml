@@ -101,6 +101,7 @@ StyledRect {
             Layout.alignment: Qt.AlignHCenter
 
             type: SplitButton.Tonal
+            textColour: root.accent
             disabled: !Storage.disks.length
             fallbackIcon: "storage"
             fallbackText: Tr.tr("No disks")
