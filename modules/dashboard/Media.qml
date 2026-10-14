@@ -36,7 +36,7 @@ Item {
         spacing: Tokens.spacing.extraLarge
 
         CoverVisualiser {
-            visible: !root.callVisible
+            voiceCall: root.callVisible
             Layout.fillHeight: true
             implicitWidth: Tokens.sizes.dashboard.mediaSectionWidth
         }

@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls as Controls
 import QtQuick.Layouts
 import Caelestia.Config
 import Caelestia.I18n
@@ -12,31 +13,7 @@ Item {
 
     RowLayout {
         anchors.fill: parent
-        spacing: Tokens.spacing.extraLarge
-
-        Rectangle {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: Tokens.sizes.dashboard.mediaSectionWidth
-            Layout.preferredHeight: width
-            radius: Tokens.rounding.largeIncreased
-            color: Colours.palette.m3secondaryContainer
-            clip: true
-
-            Image {
-                id: callImage
-                anchors.fill: parent
-                source: DiscordVoice.call?.icon ?? ""
-                asynchronous: true
-                fillMode: Image.PreserveAspectCrop
-            }
-            MaterialIcon {
-                anchors.centerIn: parent
-                visible: callImage.status !== Image.Ready
-                text: DiscordVoice.call?.kind === "guild" ? "groups" : "call"
-                fontStyle: Tokens.font.icon.builders.large.scale(2).build()
-                color: Colours.palette.m3onSecondaryContainer
-            }
-        }
+        spacing: Tokens.spacing.medium
 
         ColumnLayout {
             Layout.fillWidth: true
@@ -106,84 +83,84 @@ Item {
 
             StyledText {
                 visible: DiscordVoice.participants.length > 0
-                text: Tr.tr("In voice")
+                text: `${Tr.tr("In voice")} (${DiscordVoice.participants.length})`
                 font: Tokens.font.title.small
             }
-            Repeater {
-                model: DiscordVoice.participants.slice(0, 4)
-                delegate: RowLayout {
-                    required property var modelData
-                    Layout.fillWidth: true
+            Flickable {
+                id: participantList
+                objectName: "voiceParticipantList"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
+                contentWidth: width
+                contentHeight: roster.implicitHeight
+                boundsBehavior: Flickable.StopAtBounds
+                flickableDirection: Flickable.VerticalFlick
+                Controls.ScrollBar.vertical: Controls.ScrollBar {
+                    policy: Controls.ScrollBar.AsNeeded
+                    active: participantList.contentHeight > participantList.height
+                    interactive: true
+                }
+
+                ColumnLayout {
+                    id: roster
+                    width: participantList.width - Tokens.spacing.medium
                     spacing: Tokens.spacing.small
-                    Rectangle {
-                        Layout.preferredWidth: 28
-                        Layout.preferredHeight: 28
-                        radius: width / 2
-                        color: Colours.palette.m3secondaryContainer
-                        clip: true
-                        Image {
-                            anchors.fill: parent
-                            source: modelData.avatar ?? ""
-                            fillMode: Image.PreserveAspectCrop
-                            asynchronous: true
+                    Repeater {
+                        model: DiscordVoice.participants
+                        delegate: RowLayout {
+                            required property var modelData
+                            Layout.fillWidth: true
+                            spacing: Tokens.spacing.small
+                            Rectangle {
+                                Layout.preferredWidth: 28
+                                Layout.preferredHeight: 28
+                                radius: width / 2
+                                color: Colours.palette.m3secondaryContainer
+                                clip: true
+                                Image {
+                                    anchors.fill: parent
+                                    source: modelData.avatar ?? ""
+                                    fillMode: Image.PreserveAspectCrop
+                                    asynchronous: true
+                                }
+                            }
+                            StyledText {
+                                Layout.fillWidth: true
+                                text: modelData.name
+                                elide: Text.ElideRight
+                                font: Tokens.font.body.medium
+                            }
+                            MaterialIcon {
+                                visible: modelData.muted || modelData.deafened || modelData.speaking
+                                text: modelData.deafened ? "hearing_disabled" : modelData.muted ? "mic_off" : "graphic_eq"
+                                color: modelData.speaking ? Colours.accents.green : Colours.palette.m3onSurfaceVariant
+                            }
+                            StyledSlider {
+                                visible: modelData.localVolume !== null
+                                Layout.preferredWidth: 110
+                                from: 0
+                                to: 200
+                                value: modelData.localVolume ?? 0
+                                interactionOnMove: false
+                                enabled: DiscordVoice.controlsAvailable && !DiscordVoice.busy && modelData.localVolume !== null
+                                onInteraction: v => DiscordVoice.sendCommand("volume", Math.round(v * 200), modelData.id)
+                            }
+                            StyledText {
+                                visible: modelData.localVolume !== null
+                                text: `${modelData.localVolume}%`
+                                font: Tokens.font.body.small
+                                color: Colours.palette.m3onSurfaceVariant
+                            }
                         }
                     }
-                    StyledText {
-                        Layout.fillWidth: true
-                        text: modelData.name
-                        elide: Text.ElideRight
-                        font: Tokens.font.body.medium
-                    }
-                    MaterialIcon {
-                        visible: modelData.muted || modelData.deafened || modelData.speaking
-                        text: modelData.deafened ? "hearing_disabled" : modelData.muted ? "mic_off" : "graphic_eq"
-                        color: modelData.speaking ? Colours.accents.green : Colours.palette.m3onSurfaceVariant
-                    }
-                    StyledSlider {
-                        visible: modelData.localVolume !== null
-                        Layout.preferredWidth: 110
-                        from: 0
-                        to: 200
-                        value: modelData.localVolume ?? 0
-                        interactionOnMove: false
-                        enabled: DiscordVoice.controlsAvailable && !DiscordVoice.busy && modelData.localVolume !== null
-                        onInteraction: v => DiscordVoice.sendCommand("volume", Math.round(v * 200), modelData.id)
-                    }
-                    StyledText {
-                        visible: modelData.localVolume !== null
-                        text: `${modelData.localVolume}%`
-                        font: Tokens.font.body.small
-                        color: Colours.palette.m3onSurfaceVariant
-                    }
                 }
             }
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: Tokens.spacing.medium
-                MaterialIcon {
-                    text: "volume_up"
-                    fontStyle: Tokens.font.icon.medium
-                    color: Colours.palette.m3onSurfaceVariant
-                }
-                StyledText {
-                    text: Tr.tr("Vesktop volume")
-                    font: Tokens.font.body.small
-                }
-                StyledSlider {
-                    Layout.fillWidth: true
-                    from: 0
-                    to: GlobalConfig.services.maxVolume
-                    value: Audio.vesktopPlayback?.audio?.volume ?? 0
-                    enabled: !!Audio.vesktopPlayback?.ready
-                    onInteraction: v => Audio.setStreamVolume(Audio.vesktopPlayback, v * to)
-                }
-                StyledText {
-                    text: Audio.vesktopPlayback ? `${Math.round(Audio.getStreamVolume(Audio.vesktopPlayback) * 100)}%` : "—"
-                    font: Tokens.font.body.small
-                    color: Colours.palette.m3onSurfaceVariant
-                }
-            }
-            Item { Layout.fillHeight: true }
+        }
+
+        VoiceVolume {
+            Layout.preferredWidth: 54
+            Layout.fillHeight: true
         }
     }
 }

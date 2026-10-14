@@ -31,11 +31,49 @@ class DiscordVoiceMediaTest(unittest.TestCase):
             self.assertIn("interactionOnMove: false", page)
 
     def test_app_volume_is_pipewire_playback_not_discord_person_volume(self):
+        volume = (ROOT / "modules/dashboard/media/VoiceVolume.qml").read_text()
+        self.assertIn("Audio.vesktopPlayback", volume)
+        self.assertIn("Audio.setStreamVolume(Audio.vesktopPlayback", volume)
         for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
             page = (ROOT / component).read_text()
-            self.assertIn("Audio.vesktopPlayback", page)
-            self.assertIn("Audio.setStreamVolume(Audio.vesktopPlayback", page)
+            self.assertIn("VoiceVolume {", page)
             self.assertIn("StyledSlider {", page)
+
+    def test_call_art_uses_original_visualiser_and_cover_mask(self):
+        full = (ROOT / "modules/dashboard/Media.qml").read_text()
+        visualiser = (ROOT / "modules/dashboard/media/CoverVisualiser.qml").read_text()
+        art = (ROOT / "components/widgets/CoverArt.qml").read_text()
+        compact = (ROOT / "modules/dashboard/dash/VoiceCall.qml").read_text()
+        self.assertIn("voiceCall: root.callVisible", full)
+        self.assertNotIn("visible: !root.callVisible\n            Layout.fillHeight", full)
+        self.assertIn("voiceCall: true", compact)
+        self.assertIn("CoverVisualiser {", compact)
+        self.assertIn("artworkSource: root.voiceCall", visualiser)
+        self.assertIn("fallbackIcon: root.voiceCall", visualiser)
+        self.assertIn("showBrokenIcon: !root.voiceCall", visualiser)
+        self.assertIn("source: root.artworkSource", art)
+        self.assertIn("root.fallbackIcon", art)
+
+    def test_every_participant_is_reachable_in_a_vertical_scroll_area(self):
+        for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
+            page = (ROOT / component).read_text()
+            self.assertIn("flickableDirection: Flickable.VerticalFlick", page)
+            self.assertIn("ScrollBar.vertical:", page)
+            self.assertIn("active: participantList.contentHeight > participantList.height", page)
+            self.assertIn("model: DiscordVoice.participants", page)
+            self.assertNotIn("DiscordVoice.participants.slice(", page)
+            self.assertNotIn("DiscordVoice.participants.filter(", page)
+
+    def test_application_volume_is_a_fixed_vertical_control_outside_roster(self):
+        volume = (ROOT / "modules/dashboard/media/VoiceVolume.qml").read_text()
+        self.assertIn("FilledSlider {", volume)
+        self.assertIn('text: Tr.tr("App")', volume)
+        self.assertIn("onMoved: Audio.setStreamVolume(Audio.vesktopPlayback, value)", volume)
+        self.assertNotIn("onWheel:", volume)
+        for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
+            page = (ROOT / component).read_text()
+            self.assertIn("VoiceVolume {", page)
+            self.assertLess(page.index("Flickable {"), page.index("VoiceVolume {"))
 
 
 if __name__ == "__main__":

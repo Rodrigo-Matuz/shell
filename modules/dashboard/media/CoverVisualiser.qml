@@ -13,10 +13,13 @@ import qs.services
 Item {
     id: root
 
+    property bool voiceCall: false
+    property bool compact: false
+    property real coverSize: Tokens.sizes.dashboard.mediaCoverArtSize
     readonly property real centerX: width / 2
     readonly property real centerY: height / 2
     readonly property real spacing: Tokens.spacing.medium
-    readonly property real maxMagnitude: (implicitWidth - cover.implicitWidth) / 2 - spacing
+    readonly property real maxMagnitude: Math.max(0, (width - cover.width) / 2 - spacing)
     readonly property var accentColours: [
         Colours.accents.red,
         Colours.accents.orange,
@@ -81,10 +84,15 @@ Item {
 
     CoverArt {
         id: cover
+        objectName: "mediaCoverArt"
 
         anchors.centerIn: parent
-        shape.shape: MaterialShape.Cookie9Sided
-        implicitWidth: Tokens.sizes.dashboard.mediaCoverArtSize
-        implicitHeight: Tokens.sizes.dashboard.mediaCoverArtSize
+        shape.shape: root.compact ? MaterialShape.Cookie12Sided : MaterialShape.Cookie9Sided
+        artworkSource: root.voiceCall ? (DiscordVoice.call?.icon ?? "") : Players.getArtUrl(Players.active)
+        fallbackIcon: root.voiceCall ? (DiscordVoice.call?.kind === "guild" ? "groups" : "call") : "art_track"
+        showBrokenIcon: !root.voiceCall
+        rotating: !root.voiceCall && (Players.active?.isPlaying ?? false)
+        implicitWidth: root.coverSize
+        implicitHeight: root.coverSize
     }
 }

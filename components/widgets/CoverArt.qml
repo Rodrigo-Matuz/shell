@@ -16,6 +16,10 @@ Item {
     readonly property alias shape: shape
 
     property bool hadPrevious
+    property url artworkSource: Players.getArtUrl(Players.active)
+    property string fallbackIcon: "art_track"
+    property bool showBrokenIcon: true
+    property bool rotating: Players.active?.isPlaying ?? false
     property color fallbackColour: Colours.layer(Colours.palette.m3surfaceContainerHighest, 2)
 
     // Slight glow to separate from bg
@@ -47,7 +51,7 @@ Item {
 
             Anim on rotation {
                 running: true
-                paused: !Players.active?.isPlaying
+                paused: !root.rotating
                 from: 360
                 to: 0
                 duration: 23500
@@ -61,7 +65,7 @@ Item {
         anchors.centerIn: parent
 
         grade: 200
-        text: image.status === Image.Error ? "broken_image" : "art_track"
+        text: root.showBrokenIcon && image.status === Image.Error ? "broken_image" : root.fallbackIcon
         color: Colours.palette.m3onSurfaceVariant
         fontStyle: Tokens.font.icon.size((parent.width * 0.35) || 1).build()
         opacity: image.status === Image.Null || image.status === Image.Error ? 1 : 0
@@ -97,7 +101,7 @@ Item {
 
         anchors.fill: parent
 
-        source: Players.getArtUrl(Players.active)
+        source: root.artworkSource
 
         layer.enabled: true
         layer.effect: Mask {
