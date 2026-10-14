@@ -1,23 +1,24 @@
 # CaelestiaVoice for stock Vesktop (opt-in)
 
-`default.nix` is a standalone Home Manager module. It copies the canonical `./caelestiaVoice` sources into the **pinned nixpkgs** Vencord build (currently 1.15.6), preserving its dependency lock, patches and build flags. The stock nixpkgs Vesktop (currently 1.6.7) is overridden to embed that Vencord and uses `programs.vesktop.vencord.useSystem = true`. Nothing is enabled merely by having these files in the shell repository.
+`homeManagerModules.vesktop-voice` is an opt-in Home Manager module exported by the Caelestia shell flake. It copies the canonical `./caelestiaVoice` sources into the **pinned nixpkgs** Vencord build, preserving its dependency lock, patches and build flags. The stock nixpkgs Vesktop is overridden to embed that Vencord and uses `programs.vesktop.vencord.useSystem = true`. Installing Caelestia alone does not install or enable the Vesktop plugin.
 
-## Install later, in `/etc/nixos` (not done here)
+## Install with Home Manager
 
-1. Publish the shell repository including this module and `caelestiaVoice/`. Update the `/etc/nixos` flake's `caelestia-shell` input to that revision. The currently locked remote shell input **cannot** see these local uncommitted files.
-2. Keep the existing `/etc/nixos/home/vesktop/default.nix` import and settings declarations. Add this separate import to `home-manager.users.matuz.imports` in `/etc/nixos/flake.nix`:
+1. Add/update the `caelestia-shell` input in your flake and lock a revision containing this module.
+2. Add the named module alongside the Caelestia module in your Home Manager imports (for NixOS with integrated Home Manager, inside `home-manager.users.<user>.imports`):
 
    ```nix
-   (import "${inputs.caelestia-shell}/integrations/vencord/default.nix")
+   inputs.caelestia-shell.homeManagerModules.default
+   inputs.caelestia-shell.homeManagerModules.vesktop-voice
    ```
 
-   This is an expression inside the imports list, not a change to the shell's existing `homeManagerModules.default`. Do not also install a second copy of Vesktop in `home.packages` or `nix profile`.
-3. Before activating, **stop Vesktop** so it cannot write settings during the transition. Back up `~/.config/vesktop/settings/settings.json` (including the target of any symlink) and `~/.config/vesktop/state.json`. Evaluate/build the changed `/etc/nixos` configuration first. A build alone does not change the running application.
-4. On the eventual Home Manager activation, its previous managed read-only settings symlink is removed by `linkGeneration`. This module seeds a **regular, mode 0600, writable file** only if the target is absent. It leaves any existing regular file or remaining symlink untouched. The seed preserves every old root-level key exactly, and adds **only** `plugins.CaelestiaVoice.enabled = true`; it intentionally does not migrate the 79 legacy root-level plugin keys into `plugins` or enable them en masse. Those root keys may not have an effect in Vencord's current schema. For a pre-existing writable file, enable CaelestiaVoice explicitly through Vencord's plugin UI (or edit only `plugins.CaelestiaVoice.enabled` yourself); the seed will not overwrite or repair it. Subsequent Nix settings edits do not replace a seeded file.
-5. **Only after** the new package is installed and the Home Manager configuration points at system Vencord, remove only the development `vencordDir` field from `~/.config/vesktop/state.json`. Preserve all other state keys. Otherwise Vesktop continues loading the development checkout, masking the packaged plugin. Do not delete or replace the state file wholesale. Start Vesktop and check its plugin list, writable settings, and voice socket in the live session; a build cannot prove runtime behavior.
+   The previous path import `(import "${inputs.caelestia-shell}/integrations/vencord/default.nix")` also works; use **one or the other**, not both. Do not install a second Vesktop through `home.packages` or `nix profile`.
+3. Stop Vesktop before activating Home Manager. Back up `~/.config/vesktop/settings/settings.json` and `~/.config/vesktop/state.json` if they exist; build the configuration first. A build alone does not change the running application.
+4. On activation, the module seeds a **regular, mode 0600, writable settings file** with `plugins.CaelestiaVoice.enabled = true` only if it is absent. It preserves an existing writable file or remaining symlink. If you already have Vesktop settings, enable CaelestiaVoice in Vencord's plugin UI; importing the module will not overwrite your settings. Subsequent Nix settings edits do not replace a seeded file.
+5. If you previously configured a development `vencordDir` in `~/.config/vesktop/state.json`, remove **only that field**, after the new package is installed, or Vesktop will keep loading the development checkout. Fresh installations do not need this step. Start Vesktop and check its plugin list and voice socket; a build does not prove runtime behavior.
 
-No activation, restart, flake update, or modification of `/etc/nixos` is performed by this repository module itself.
+No activation, restart, flake update, or modification of your system configuration is performed by this repository module itself.
 
 ## Isolated pre-install check
 
-Use a scratch Home Manager consumer with the **pinned `/etc/nixos` nixpkgs and Home Manager inputs**, importing this local `default.nix` and passing the existing Vesktop settings into `programs.vesktop.vencord.settings`. Evaluate that `home.file."${config.xdg.configHome}/vesktop/settings/settings.json".enable` is `false`, then build the consumer's `activationPackage` with `nix build --impure --no-link --no-write-lock-file --expr '(import /path/to/scratch-consumer.nix).activationPackage'`. Do **not** run its `activate` script. Before the eventual switch, test the updated `/etc/nixos` flake with `nix flake check --no-write-lock-file` and `nix build --no-link --no-write-lock-file /etc/nixos#nixosConfigurations.nixos.config.system.build.toplevel` after the shell input update.
+Evaluate the exported path with `nix eval --raw --no-write-lock-file .#homeManagerModules.vesktop-voice` in the shell checkout. To test activation without switching, use a scratch Home Manager consumer with the pinned nixpkgs and Home Manager inputs, importing this module and building its `activationPackage`; do **not** run `activate`. Before switching a NixOS installation, check and build its flake with `--no-write-lock-file` after updating the shell input.

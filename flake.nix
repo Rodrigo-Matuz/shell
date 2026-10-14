@@ -66,5 +66,6 @@
     });
 
     homeManagerModules.default = modules.importApply ./nix/hm-module.nix self;
+    homeManagerModules.vesktop-voice = ./integrations/vencord/default.nix;
   };
 }
