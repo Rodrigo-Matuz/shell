@@ -20,15 +20,34 @@ class DiscordVoiceMediaTest(unittest.TestCase):
         self.assertIn("VoiceCall {", page)
         self.assertIn("onShowMusicRequested: root.showMusic = true", page)
         self.assertIn("Players.active?.togglePlaying()", page)
-    def test_call_controls_are_capability_gated_and_local_volume_is_separate(self):
+    def test_call_controls_are_capability_gated_without_participant_volume(self):
         for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
             page = (ROOT / component).read_text()
             self.assertIn("DiscordVoice.controlsAvailable", page)
             self.assertIn('sendCommand("selfMute"', page)
             self.assertIn('sendCommand("selfDeaf"', page)
-            self.assertIn('sendCommand("volume"', page)
-            self.assertIn("modelData.localVolume", page)
-            self.assertIn("interactionOnMove: false", page)
+            self.assertNotIn('sendCommand("volume"', page)
+            self.assertNotIn("modelData.localVolume", page)
+            self.assertNotIn("StyledSlider {", page)
+
+    def test_full_roster_shows_two_people_per_row_and_talk_hear_status(self):
+        page = (ROOT / "modules/dashboard/media/VoiceCall.qml").read_text()
+        self.assertIn("GridLayout {", page)
+        self.assertIn("columns: 2", page)
+        self.assertIn('text: modelData.muted || modelData.deafened ? "mic_off" : "mic"', page)
+        self.assertIn('text: modelData.deafened ? "hearing_disabled" : "headphones"', page)
+        self.assertIn("modelData.speaking", page)
+
+    def test_elided_participant_names_are_available_on_hover(self):
+        for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
+            page = (ROOT / component).read_text()
+            self.assertIn("Controls.ToolTip.text: modelData.name", page)
+            self.assertIn("HoverHandler {", page)
+
+    def test_compact_roster_keeps_readable_names_and_talk_hear_status(self):
+        page = (ROOT / "modules/dashboard/dash/VoiceCall.qml").read_text()
+        self.assertIn('text: modelData.muted || modelData.deafened ? "mic_off" : "mic"', page)
+        self.assertIn('text: modelData.deafened ? "hearing_disabled" : "headphones"', page)
 
     def test_full_call_controls_share_a_row_to_the_left_of_channel_and_server(self):
         page = (ROOT / "modules/dashboard/media/VoiceCall.qml").read_text()
@@ -69,7 +88,7 @@ class DiscordVoiceMediaTest(unittest.TestCase):
         for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
             page = (ROOT / component).read_text()
             self.assertIn("VoiceVolume {", page)
-            self.assertIn("StyledSlider {", page)
+            self.assertNotIn("StyledSlider {", page)
 
     def test_call_art_uses_original_visualiser_and_cover_mask(self):
         full = (ROOT / "modules/dashboard/Media.qml").read_text()

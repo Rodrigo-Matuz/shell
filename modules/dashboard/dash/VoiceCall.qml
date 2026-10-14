@@ -113,56 +113,43 @@ Item {
                     spacing: Tokens.spacing.medium
                     Repeater {
                         model: DiscordVoice.participants
-                        delegate: ColumnLayout {
+                        delegate: RowLayout {
                             required property var modelData
                             Layout.fillWidth: true
                             spacing: Tokens.spacing.extraSmall
-                            RowLayout {
-                                Layout.fillWidth: true
-                                spacing: Tokens.spacing.extraSmall
-                                ClippingRectangle {
-                                    Layout.preferredWidth: 22
-                                    Layout.preferredHeight: 22
-                                    radius: width / 2
-                                    color: Colours.palette.m3secondaryContainer
-                                    Image {
-                                        anchors.fill: parent
-                                        source: modelData.avatar ?? ""
-                                        fillMode: Image.PreserveAspectCrop
-                                        asynchronous: true
-                                    }
-                                }
-                                StyledText {
-                                    Layout.fillWidth: true
-                                    text: modelData.name
-                                    font: Tokens.font.body.small
-                                    elide: Text.ElideRight
-                                }
-                                MaterialIcon {
-                                    visible: modelData.muted || modelData.deafened || modelData.speaking
-                                    text: modelData.deafened ? "hearing_disabled" : modelData.muted ? "mic_off" : "graphic_eq"
-                                    color: modelData.speaking ? Colours.accents.green : Colours.palette.m3onSurfaceVariant
+                            ClippingRectangle {
+                                Layout.preferredWidth: 22
+                                Layout.preferredHeight: 22
+                                radius: width / 2
+                                color: Colours.palette.m3secondaryContainer
+                                Image {
+                                    anchors.fill: parent
+                                    source: modelData.avatar ?? ""
+                                    fillMode: Image.PreserveAspectCrop
+                                    asynchronous: true
                                 }
                             }
-                            RowLayout {
+                            StyledText {
                                 Layout.fillWidth: true
-                                visible: modelData.localVolume !== null
-                                Layout.leftMargin: 22
-                                spacing: Tokens.spacing.extraSmall
-                                StyledSlider {
-                                    Layout.fillWidth: true
-                                    from: 0
-                                    to: 200
-                                    value: modelData.localVolume ?? 0
-                                    interactionOnMove: false
-                                    enabled: DiscordVoice.controlsAvailable && !DiscordVoice.busy && modelData.localVolume !== null
-                                    onInteraction: v => DiscordVoice.sendCommand("volume", Math.round(v * 200), modelData.id)
-                                }
-                                StyledText {
-                                    text: `${modelData.localVolume}%`
-                                    font: Tokens.font.body.small
-                                    color: Colours.palette.m3onSurfaceVariant
-                                }
+                                Layout.minimumWidth: 0
+                                text: modelData.name
+                                font: Tokens.font.body.small
+                                elide: Text.ElideRight
+                                Accessible.name: modelData.name
+                                Controls.ToolTip.visible: nameHover.hovered && truncated
+                                Controls.ToolTip.delay: 400
+                                Controls.ToolTip.text: modelData.name
+                                HoverHandler { id: nameHover }
+                            }
+                            MaterialIcon {
+                                text: modelData.muted || modelData.deafened ? "mic_off" : "mic"
+                                color: modelData.muted || modelData.deafened ? Colours.accents.red : modelData.speaking ? Colours.accents.green : Colours.palette.m3onSurfaceVariant
+                                Accessible.name: modelData.muted || modelData.deafened ? Tr.tr("Cannot talk") : Tr.tr("Can talk")
+                            }
+                            MaterialIcon {
+                                text: modelData.deafened ? "hearing_disabled" : "headphones"
+                                color: modelData.deafened ? Colours.accents.red : Colours.palette.m3onSurfaceVariant
+                                Accessible.name: modelData.deafened ? Tr.tr("Cannot hear") : Tr.tr("Can hear")
                             }
                         }
                     }
