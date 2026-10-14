@@ -30,6 +30,38 @@ class DiscordVoiceMediaTest(unittest.TestCase):
             self.assertIn("modelData.localVolume", page)
             self.assertIn("interactionOnMove: false", page)
 
+    def test_full_call_controls_share_a_row_to_the_left_of_channel_and_server(self):
+        page = (ROOT / "modules/dashboard/media/VoiceCall.qml").read_text()
+        mute = page.index('onClicked: DiscordVoice.sendCommand("selfMute"')
+        deafen = page.index('onClicked: DiscordVoice.sendCommand("selfDeaf"')
+        channel = page.index('text: DiscordVoice.call?.name ?? ""')
+        server = page.index('text: DiscordVoice.call?.contextName ?? ""')
+        roster = page.index('objectName: "voiceParticipantList"')
+        self.assertLess(mute, deafen)
+        self.assertLess(deafen, channel)
+        self.assertLess(channel, server)
+        self.assertLess(server, roster)
+        self.assertNotIn('text: DiscordVoice.self?.muted ? Tr.tr("Muted")', page)
+        self.assertNotIn('text: DiscordVoice.self?.deafened ? Tr.tr("Deafened")', page)
+        self.assertIn('Accessible.name: DiscordVoice.self?.muted', page)
+        self.assertIn('Accessible.name: DiscordVoice.self?.deafened', page)
+
+    def test_participant_avatars_are_clipped_to_circles_in_both_views(self):
+        for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
+            page = (ROOT / component).read_text()
+            self.assertIn("import Quickshell.Widgets", page)
+            self.assertIn("ClippingRectangle {", page)
+            self.assertIn("radius: width / 2", page)
+            self.assertIn('source: modelData.avatar ?? ""', page)
+
+    def test_compact_call_controls_share_a_row_to_the_left_of_names(self):
+        page = (ROOT / "modules/dashboard/dash/VoiceCall.qml").read_text()
+        header = page.split("MediaParts.CoverVisualiser {", 1)[1].split("In voice", 1)[0]
+        self.assertLess(header.index('icon: DiscordVoice.self?.muted'), header.index('text: DiscordVoice.call?.name'))
+        self.assertLess(header.index('icon: DiscordVoice.self?.deafened'), header.index('text: DiscordVoice.call?.contextName'))
+        self.assertIn('Accessible.name: DiscordVoice.self?.muted', header)
+        self.assertIn('Accessible.name: DiscordVoice.self?.deafened', header)
+
     def test_app_volume_is_pipewire_playback_not_discord_person_volume(self):
         volume = (ROOT / "modules/dashboard/media/VoiceVolume.qml").read_text()
         self.assertIn("Audio.vesktopPlayback", volume)

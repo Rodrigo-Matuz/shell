@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls as Controls
 import QtQuick.Layouts
+import Quickshell.Widgets
 import Caelestia.Config
 import Caelestia.I18n
 import qs.components
@@ -40,44 +41,42 @@ Item {
                 }
             }
 
-            StyledText {
-                Layout.fillWidth: true
-                text: DiscordVoice.call?.name ?? ""
-                font: Tokens.font.headline.medium
-                elide: Text.ElideRight
-            }
-            StyledText {
-                Layout.fillWidth: true
-                text: DiscordVoice.call?.contextName ?? ""
-                visible: text.length > 0
-                font: Tokens.font.body.large
-                color: Colours.palette.m3onSurfaceVariant
-                elide: Text.ElideRight
-            }
-
             RowLayout {
+                Layout.fillWidth: true
                 spacing: Tokens.spacing.medium
                 IconButton {
                     icon: DiscordVoice.self?.muted ? "mic_off" : "mic"
                     type: IconButton.Tonal
                     checked: DiscordVoice.self?.muted ?? false
                     disabled: !DiscordVoice.controlsAvailable || DiscordVoice.busy || !DiscordVoice.self
+                    Accessible.name: DiscordVoice.self?.muted ? Tr.tr("Unmute microphone") : Tr.tr("Mute microphone")
                     onClicked: DiscordVoice.sendCommand("selfMute", !DiscordVoice.self.muted)
-                }
-                StyledText {
-                    text: DiscordVoice.self?.muted ? Tr.tr("Muted") : Tr.tr("Microphone on")
-                    font: Tokens.font.body.small
                 }
                 IconButton {
                     icon: DiscordVoice.self?.deafened ? "hearing_disabled" : "headphones"
                     type: IconButton.Tonal
                     checked: DiscordVoice.self?.deafened ?? false
                     disabled: !DiscordVoice.controlsAvailable || DiscordVoice.busy || !DiscordVoice.self
+                    Accessible.name: DiscordVoice.self?.deafened ? Tr.tr("Undeafen") : Tr.tr("Deafen")
                     onClicked: DiscordVoice.sendCommand("selfDeaf", !DiscordVoice.self.deafened)
                 }
-                StyledText {
-                    text: DiscordVoice.self?.deafened ? Tr.tr("Deafened") : Tr.tr("Audio on")
-                    font: Tokens.font.body.small
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: Tokens.spacing.extraSmall
+                    StyledText {
+                        Layout.fillWidth: true
+                        text: DiscordVoice.call?.name ?? ""
+                        font: Tokens.font.headline.medium
+                        elide: Text.ElideRight
+                    }
+                    StyledText {
+                        Layout.fillWidth: true
+                        text: DiscordVoice.call?.contextName ?? ""
+                        visible: text.length > 0
+                        font: Tokens.font.body.large
+                        color: Colours.palette.m3onSurfaceVariant
+                        elide: Text.ElideRight
+                    }
                 }
             }
 
@@ -112,12 +111,11 @@ Item {
                             required property var modelData
                             Layout.fillWidth: true
                             spacing: Tokens.spacing.small
-                            Rectangle {
+                            ClippingRectangle {
                                 Layout.preferredWidth: 28
                                 Layout.preferredHeight: 28
                                 radius: width / 2
                                 color: Colours.palette.m3secondaryContainer
-                                clip: true
                                 Image {
                                     anchors.fill: parent
                                     source: modelData.avatar ?? ""
