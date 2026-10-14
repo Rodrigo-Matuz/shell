@@ -24,6 +24,10 @@ The fork keeps the upstream shell architecture and adds or maintains:
 
 The shell and [the matching CLI fork](https://github.com/Rodrigo-Matuz/cli) are intended to be used together. The CLI has its own installation and configuration.
 
+## Companion CLI fork
+
+Use the [Caelestia CLI fork](https://github.com/Rodrigo-Matuz/cli) for wallpaper selection, color schemes, screenshots, recording, shell IPC, installation, and updates. The shell provides the graphical interface and services; the CLI provides the commands that control them. The shell's default Home Manager package uses the matching CLI through its `with-cli` build, so a separate CLI package is usually unnecessary when both are installed through Home Manager.
+
 ## Install the shell with Home Manager
 
 The flake exports a Home Manager module at `homeManagerModules.default`.
@@ -110,9 +114,11 @@ inputs.caelestia-shell.homeManagerModules.vesktop-voice
 
 Do not install another Vesktop through `home.packages` or `nix profile`; duplicate Vesktop desktop files and icons can make Home Manager activation fail.
 
-### Add your own Vencord settings
+### Optional Vesktop settings
 
-Vencord plugin options belong under `vencord.settings.plugins`, not directly under `vencord.settings`:
+This subsection only applies if you also enable `homeManagerModules.vesktop-voice`. Installing or using Caelestia Shell alone does not require Vesktop, Vencord, or any of these settings.
+
+When the optional Vesktop module is enabled, Vencord plugin options belong under `vencord.settings.plugins`, not directly under `vencord.settings`:
 
 ```nix
 programs.vesktop.vencord.settings.plugins = {
