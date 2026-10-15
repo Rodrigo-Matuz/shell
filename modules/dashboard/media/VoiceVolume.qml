@@ -9,7 +9,7 @@ import qs.services
 Item {
     id: root
 
-    implicitWidth: 54
+    implicitWidth: 46
     implicitHeight: 190
 
     ColumnLayout {
@@ -29,7 +29,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             Layout.fillHeight: true
             Layout.minimumHeight: 72
-            Layout.preferredWidth: 38
+            Layout.preferredWidth: 30
             icon: "volume_up"
             from: 0
             to: GlobalConfig.services.maxVolume

@@ -155,7 +155,7 @@ Item {
         }
 
         VoiceVolume {
-            Layout.preferredWidth: 54
+            Layout.preferredWidth: 46
             Layout.fillHeight: true
         }
     }

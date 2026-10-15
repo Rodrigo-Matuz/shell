@@ -38,50 +38,57 @@ Item {
                     onClicked: root.showMusicRequested()
                 }
             }
-            MediaParts.CoverVisualiser {
-                Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: Math.min(root.width * 0.46, 125)
-                Layout.preferredHeight: width
-                voiceCall: true
-                compact: true
-                coverSize: Math.min(84, width * 0.68)
-            }
             RowLayout {
                 Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter
                 spacing: Tokens.spacing.extraSmall
-                IconButton {
-                    icon: DiscordVoice.self?.muted ? "mic_off" : "mic"
-                    type: IconButton.Tonal
-                    checked: DiscordVoice.self?.muted ?? false
-                    disabled: !DiscordVoice.controlsAvailable || DiscordVoice.busy || !DiscordVoice.self
-                    Accessible.name: DiscordVoice.self?.muted ? Tr.tr("Unmute microphone") : Tr.tr("Mute microphone")
-                    onClicked: DiscordVoice.sendCommand("selfMute", !DiscordVoice.self.muted)
+
+                MediaParts.CoverVisualiser {
+                    Layout.preferredWidth: Math.min(root.width * 0.58, 92)
+                    Layout.preferredHeight: width
+                    voiceCall: true
+                    compact: true
+                    coverSize: Math.min(92, width * 0.78)
                 }
-                IconButton {
-                    icon: DiscordVoice.self?.deafened ? "hearing_disabled" : "headphones"
-                    type: IconButton.Tonal
-                    checked: DiscordVoice.self?.deafened ?? false
-                    disabled: !DiscordVoice.controlsAvailable || DiscordVoice.busy || !DiscordVoice.self
-                    Accessible.name: DiscordVoice.self?.deafened ? Tr.tr("Undeafen") : Tr.tr("Deafen")
-                    onClicked: DiscordVoice.sendCommand("selfDeaf", !DiscordVoice.self.deafened)
-                }
+
                 ColumnLayout {
-                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter
                     spacing: Tokens.spacing.extraSmall
-                    StyledText {
-                        Layout.fillWidth: true
-                        text: DiscordVoice.call?.name ?? ""
-                        font: Tokens.font.title.small
-                        elide: Text.ElideRight
+
+                    IconButton {
+                        icon: DiscordVoice.self?.muted ? "mic_off" : "mic"
+                        type: IconButton.Tonal
+                        checked: DiscordVoice.self?.muted ?? false
+                        disabled: !DiscordVoice.controlsAvailable || DiscordVoice.busy || !DiscordVoice.self
+                        Accessible.name: DiscordVoice.self?.muted ? Tr.tr("Unmute microphone") : Tr.tr("Mute microphone")
+                        onClicked: DiscordVoice.sendCommand("selfMute", !DiscordVoice.self.muted)
                     }
-                    StyledText {
-                        Layout.fillWidth: true
-                        text: DiscordVoice.call?.contextName ?? ""
-                        visible: text.length > 0
-                        color: Colours.palette.m3onSurfaceVariant
-                        elide: Text.ElideRight
-                        font: Tokens.font.body.small
+                    IconButton {
+                        icon: DiscordVoice.self?.deafened ? "hearing_disabled" : "headphones"
+                        type: IconButton.Tonal
+                        checked: DiscordVoice.self?.deafened ?? false
+                        disabled: !DiscordVoice.controlsAvailable || DiscordVoice.busy || !DiscordVoice.self
+                        Accessible.name: DiscordVoice.self?.deafened ? Tr.tr("Undeafen") : Tr.tr("Deafen")
+                        onClicked: DiscordVoice.sendCommand("selfDeaf", !DiscordVoice.self.deafened)
                     }
+                }
+            }
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: Tokens.spacing.extraSmall
+                StyledText {
+                    Layout.fillWidth: true
+                    text: DiscordVoice.call?.name ?? ""
+                    font: Tokens.font.title.small
+                    elide: Text.ElideRight
+                }
+                StyledText {
+                    Layout.fillWidth: true
+                    text: DiscordVoice.call?.contextName ?? ""
+                    visible: text.length > 0
+                    color: Colours.palette.m3onSurfaceVariant
+                    elide: Text.ElideRight
+                    font: Tokens.font.body.small
                 }
             }
             StyledText {
@@ -96,6 +103,7 @@ Item {
                 objectName: "voiceParticipantList"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.topMargin: Tokens.spacing.small
                 clip: true
                 contentWidth: width
                 contentHeight: roster.implicitHeight
@@ -158,7 +166,7 @@ Item {
         }
 
         MediaParts.VoiceVolume {
-            Layout.preferredWidth: 54
+            Layout.preferredWidth: 46
             Layout.fillHeight: true
         }
     }

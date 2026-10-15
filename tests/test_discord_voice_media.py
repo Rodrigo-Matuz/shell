@@ -81,6 +81,27 @@ class DiscordVoiceMediaTest(unittest.TestCase):
         self.assertIn('Accessible.name: DiscordVoice.self?.muted', header)
         self.assertIn('Accessible.name: DiscordVoice.self?.deafened', header)
 
+    def test_compact_call_places_controls_beside_a_larger_round_server_icon(self):
+        page = (ROOT / "modules/dashboard/dash/VoiceCall.qml").read_text()
+        visualiser = page.index("MediaParts.CoverVisualiser {")
+        mute = page.index('icon: DiscordVoice.self?.muted')
+        deafen = page.index('icon: DiscordVoice.self?.deafened')
+        self.assertLess(visualiser, mute)
+        self.assertLess(visualiser, deafen)
+        self.assertIn("Layout.preferredWidth: Math.min(root.width * 0.58, 92)", page)
+        self.assertIn("coverSize: Math.min(92, width * 0.78)", page)
+        self.assertIn("Layout.topMargin: Tokens.spacing.small", page)
+
+    def test_voice_server_art_is_round_and_volume_control_is_narrower(self):
+        visualiser = (ROOT / "modules/dashboard/media/CoverVisualiser.qml").read_text()
+        volume = (ROOT / "modules/dashboard/media/VoiceVolume.qml").read_text()
+        self.assertIn("root.voiceCall ? MaterialShape.Circle", visualiser)
+        self.assertIn("implicitWidth: 46", volume)
+        self.assertIn("Layout.preferredWidth: 30", volume)
+        for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
+            page = (ROOT / component).read_text()
+            self.assertIn("Layout.preferredWidth: 46", page)
+
     def test_app_volume_is_pipewire_playback_not_discord_person_volume(self):
         volume = (ROOT / "modules/dashboard/media/VoiceVolume.qml").read_text()
         self.assertIn("Audio.vesktopPlayback", volume)
