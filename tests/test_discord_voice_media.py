@@ -92,21 +92,34 @@ class DiscordVoiceMediaTest(unittest.TestCase):
         self.assertIn("coverSize: Math.min(92, width * 0.78)", page)
         self.assertIn("Layout.topMargin: Tokens.spacing.small", page)
 
-    def test_voice_server_art_is_round_and_volume_control_is_narrower(self):
+    def test_voice_server_art_shape_is_preserved_and_volume_control_is_narrower(self):
         visualiser = (ROOT / "modules/dashboard/media/CoverVisualiser.qml").read_text()
         volume = (ROOT / "modules/dashboard/media/VoiceVolume.qml").read_text()
-        self.assertIn("root.voiceCall ? MaterialShape.Circle", visualiser)
+        self.assertIn("shape.shape: root.compact ? MaterialShape.Cookie12Sided : MaterialShape.Cookie9Sided", visualiser)
         self.assertIn("implicitWidth: 46", volume)
         self.assertIn("Layout.preferredWidth: 30", volume)
         for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
             page = (ROOT / component).read_text()
-            self.assertIn("Layout.preferredWidth: 46", page)
+            if component.endswith("media/VoiceCall.qml"):
+                self.assertIn("Layout.preferredWidth: 46", page)
+
+    def test_compact_voice_card_hides_volume_and_centers_title(self):
+        page = (ROOT / "modules/dashboard/dash/VoiceCall.qml").read_text()
+        self.assertNotIn("VoiceVolume {", page)
+        self.assertIn('text: Tr.tr("Vesktop call")', page)
+        self.assertIn("horizontalAlignment: Text.AlignHCenter", page)
+
+    def test_compact_media_widget_is_less_rounded(self):
+        page = (ROOT / "modules/dashboard/Dash.qml").read_text()
+        media = page.split("Layout.column: 5", 1)[1].split("Media {", 1)[0]
+        self.assertIn("radius: Tokens.rounding.extraLarge", media)
+        self.assertNotIn("extraLarge * 2", media)
 
     def test_app_volume_is_pipewire_playback_not_discord_person_volume(self):
         volume = (ROOT / "modules/dashboard/media/VoiceVolume.qml").read_text()
         self.assertIn("Audio.vesktopPlayback", volume)
         self.assertIn("Audio.setStreamVolume(Audio.vesktopPlayback", volume)
-        for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
+        for component in ("modules/dashboard/media/VoiceCall.qml",):
             page = (ROOT / component).read_text()
             self.assertIn("VoiceVolume {", page)
             self.assertNotIn("StyledSlider {", page)
@@ -142,7 +155,7 @@ class DiscordVoiceMediaTest(unittest.TestCase):
         self.assertIn('text: Tr.tr("App")', volume)
         self.assertIn("onMoved: Audio.setStreamVolume(Audio.vesktopPlayback, value)", volume)
         self.assertNotIn("onWheel:", volume)
-        for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
+        for component in ("modules/dashboard/media/VoiceCall.qml",):
             page = (ROOT / component).read_text()
             self.assertIn("VoiceVolume {", page)
             self.assertLess(page.index("Flickable {"), page.index("VoiceVolume {"))

@@ -91,7 +91,7 @@ GridLayout {
         Layout.preferredWidth: media.implicitWidth
         Layout.fillHeight: true
 
-        radius: Tokens.rounding.extraLarge * 2
+        radius: Tokens.rounding.extraLarge
 
         Media {
             id: media

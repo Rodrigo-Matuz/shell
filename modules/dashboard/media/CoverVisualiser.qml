@@ -87,7 +87,7 @@ Item {
         objectName: "mediaCoverArt"
 
         anchors.centerIn: parent
-        shape.shape: root.voiceCall ? MaterialShape.Circle : (root.compact ? MaterialShape.Cookie12Sided : MaterialShape.Cookie9Sided)
+        shape.shape: root.compact ? MaterialShape.Cookie12Sided : MaterialShape.Cookie9Sided
         artworkSource: root.voiceCall ? (DiscordVoice.call?.icon ?? "") : Players.getArtUrl(Players.active)
         fallbackIcon: root.voiceCall ? (DiscordVoice.call?.kind === "guild" ? "groups" : "call") : "art_track"
         showBrokenIcon: !root.voiceCall

@@ -30,6 +30,7 @@ Item {
                     text: Tr.tr("Vesktop call")
                     color: Colours.light ? Colours.palette.m3primary : Colours.accents.blue
                     font: Tokens.font.title.small
+                    horizontalAlignment: Text.AlignHCenter
                     elide: Text.ElideRight
                 }
                 IconButton {
@@ -165,9 +166,5 @@ Item {
             }
         }
 
-        MediaParts.VoiceVolume {
-            Layout.preferredWidth: 46
-            Layout.fillHeight: true
-        }
     }
 }
