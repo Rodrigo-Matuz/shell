@@ -60,6 +60,8 @@ Item {
                         icon: DiscordVoice.self?.muted ? "mic_off" : "mic"
                         type: IconButton.Tonal
                         checked: DiscordVoice.self?.muted ?? false
+                        activeOnColour: Colours.accents.red
+                        inactiveOnColour: Colours.accents.yellow
                         disabled: !DiscordVoice.controlsAvailable || DiscordVoice.busy || !DiscordVoice.self
                         Accessible.name: DiscordVoice.self?.muted ? Tr.tr("Unmute microphone") : Tr.tr("Mute microphone")
                         onClicked: DiscordVoice.sendCommand("selfMute", !DiscordVoice.self.muted)
@@ -68,6 +70,8 @@ Item {
                         icon: DiscordVoice.self?.deafened ? "hearing_disabled" : "headphones"
                         type: IconButton.Tonal
                         checked: DiscordVoice.self?.deafened ?? false
+                        activeOnColour: Colours.accents.red
+                        inactiveOnColour: Colours.accents.green
                         disabled: !DiscordVoice.controlsAvailable || DiscordVoice.busy || !DiscordVoice.self
                         Accessible.name: DiscordVoice.self?.deafened ? Tr.tr("Undeafen") : Tr.tr("Deafen")
                         onClicked: DiscordVoice.sendCommand("selfDeaf", !DiscordVoice.self.deafened)

@@ -108,6 +108,9 @@ class DiscordVoiceMediaTest(unittest.TestCase):
         self.assertNotIn("VoiceVolume {", page)
         self.assertIn('text: Tr.tr("Vesktop call")', page)
         self.assertIn("horizontalAlignment: Text.AlignHCenter", page)
+        self.assertIn("activeOnColour: Colours.accents.red", page)
+        self.assertIn("inactiveOnColour: Colours.accents.yellow", page)
+        self.assertIn("inactiveOnColour: Colours.accents.green", page)
 
     def test_compact_media_widget_is_less_rounded(self):
         page = (ROOT / "modules/dashboard/Dash.qml").read_text()
