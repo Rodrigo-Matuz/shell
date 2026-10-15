@@ -108,9 +108,18 @@ class DiscordVoiceMediaTest(unittest.TestCase):
         self.assertNotIn("VoiceVolume {", page)
         self.assertIn('text: Tr.tr("Vesktop call")', page)
         self.assertIn("horizontalAlignment: Text.AlignHCenter", page)
-        self.assertIn("activeOnColour: Colours.accents.red", page)
-        self.assertIn("inactiveOnColour: Colours.accents.yellow", page)
-        self.assertIn("inactiveOnColour: Colours.accents.green", page)
+
+    def test_voice_controls_and_music_action_match_between_views(self):
+        for component in ("modules/dashboard/media/VoiceCall.qml", "modules/dashboard/dash/VoiceCall.qml"):
+            page = (ROOT / component).read_text()
+            self.assertIn("activeColour: Colours.accents.red", page)
+            self.assertIn("activeOnColour: Colours.accents.whiteForeground", page)
+            self.assertIn("inactiveOnColour: Colours.accents.purple", page)
+            self.assertIn("type: IconButton.Tonal", page)
+            self.assertIn("font: Tokens.font.icon.small", page)
+            self.assertNotIn('text: Tr.tr("Music")', page)
+        full = (ROOT / "modules/dashboard/media/VoiceCall.qml").read_text()
+        self.assertIn("horizontalAlignment: Text.AlignHCenter", full)
 
     def test_compact_media_widget_is_less_rounded(self):
         page = (ROOT / "modules/dashboard/Dash.qml").read_text()

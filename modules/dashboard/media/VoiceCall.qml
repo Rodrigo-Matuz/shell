@@ -28,16 +28,15 @@ Item {
                     text: Tr.tr("Vesktop call")
                     color: Colours.light ? Colours.palette.m3primary : Colours.accents.blue
                     font: Tokens.font.title.medium
+                    horizontalAlignment: Text.AlignHCenter
+                    elide: Text.ElideRight
                 }
                 IconButton {
                     visible: Players.active !== null
                     icon: "music_note"
+                    type: IconButton.Tonal
+                    font: Tokens.font.icon.small
                     onClicked: root.showMusicRequested()
-                }
-                StyledText {
-                    visible: Players.active !== null
-                    text: Tr.tr("Music")
-                    font: Tokens.font.body.small
                 }
             }
 
@@ -48,6 +47,9 @@ Item {
                     icon: DiscordVoice.self?.muted ? "mic_off" : "mic"
                     type: IconButton.Tonal
                     checked: DiscordVoice.self?.muted ?? false
+                    activeColour: Colours.accents.red
+                    activeOnColour: Colours.accents.whiteForeground
+                    inactiveOnColour: Colours.accents.purple
                     disabled: !DiscordVoice.controlsAvailable || DiscordVoice.busy || !DiscordVoice.self
                     Accessible.name: DiscordVoice.self?.muted ? Tr.tr("Unmute microphone") : Tr.tr("Mute microphone")
                     onClicked: DiscordVoice.sendCommand("selfMute", !DiscordVoice.self.muted)
@@ -56,6 +58,9 @@ Item {
                     icon: DiscordVoice.self?.deafened ? "hearing_disabled" : "headphones"
                     type: IconButton.Tonal
                     checked: DiscordVoice.self?.deafened ?? false
+                    activeColour: Colours.accents.red
+                    activeOnColour: Colours.accents.whiteForeground
+                    inactiveOnColour: Colours.accents.purple
                     disabled: !DiscordVoice.controlsAvailable || DiscordVoice.busy || !DiscordVoice.self
                     Accessible.name: DiscordVoice.self?.deafened ? Tr.tr("Undeafen") : Tr.tr("Deafen")
                     onClicked: DiscordVoice.sendCommand("selfDeaf", !DiscordVoice.self.deafened)
