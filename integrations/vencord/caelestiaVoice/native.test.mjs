@@ -20,7 +20,7 @@ test("native IPC publishes only a validated snapshot on a private runtime socket
     const oldRuntime = process.env.XDG_RUNTIME_DIR;
     const runtime = await mkdtemp(path.join(process.env.TMPDIR, "v-"));
     process.env.XDG_RUNTIME_DIR = runtime;
-    const socketPath = path.join(runtime, "caelestia-voice", "vesktop-voice.sock");
+    const socketPath = path.join(runtime, "caelestia-voice", "discord-voice.sock");
     try {
         await assert.rejects(publishSnapshot({}, { connected: false, call: null, token: "not allowed" }), /field/i);
         await publishSnapshot({}, { connected: false, call: null });

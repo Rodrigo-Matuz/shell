@@ -33,15 +33,15 @@ Item {
             icon: "volume_up"
             from: 0
             to: GlobalConfig.services.maxVolume
-            value: Audio.vesktopPlayback?.audio?.volume ?? 0
-            enabled: !!Audio.vesktopPlayback?.ready
-            Accessible.name: Tr.tr("Vesktop volume")
-            onMoved: Audio.setStreamVolume(Audio.vesktopPlayback, value)
+            value: Audio.discordClientPlayback?.audio?.volume ?? 0
+            enabled: !!Audio.discordClientPlayback?.ready
+            Accessible.name: Tr.tr("Discord volume")
+            onMoved: Audio.setStreamVolume(Audio.discordClientPlayback, value)
         }
 
         StyledText {
             Layout.fillWidth: true
-            text: Audio.vesktopPlayback ? `${Math.round(Audio.getStreamVolume(Audio.vesktopPlayback) * 100)}%` : "—"
+            text: Audio.discordClientPlayback ? `${Math.round(Audio.getStreamVolume(Audio.discordClientPlayback) * 100)}%` : "—"
             font: Tokens.font.body.small
             color: Colours.palette.m3onSurfaceVariant
             horizontalAlignment: Text.AlignHCenter

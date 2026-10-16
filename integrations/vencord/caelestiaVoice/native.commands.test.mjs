@@ -9,7 +9,7 @@ test("native handoff gates readback and invalidates commands after stop", async 
     const oldRuntime = process.env.XDG_RUNTIME_DIR;
     const runtime = await mkdtemp(path.join(process.env.TMPDIR, "v-command-"));
     process.env.XDG_RUNTIME_DIR = runtime;
-    const socketPath = path.join(runtime, "caelestia-voice", "vesktop-voice.sock");
+    const socketPath = path.join(runtime, "caelestia-voice", "discord-voice.sock");
     const call = { kind: "guild", id: "vc-1", name: "General", contextName: "Guild", icon: null };
     try {
         await publishSnapshot({}, { connected: true, call, self: { muted: false, deafened: false } });

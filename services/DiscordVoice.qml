@@ -9,7 +9,7 @@ Singleton {
     id: root
 
     readonly property string socketPath: Quickshell.env("XDG_RUNTIME_DIR")
-        ? `${Quickshell.env("XDG_RUNTIME_DIR")}/caelestia-voice/vesktop-voice.sock` : ""
+        ? `${Quickshell.env("XDG_RUNTIME_DIR")}/caelestia-voice/discord-voice.sock` : ""
     property bool available: false
     property bool connected: false
     property var call: null

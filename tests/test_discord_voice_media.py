@@ -106,7 +106,8 @@ class DiscordVoiceMediaTest(unittest.TestCase):
     def test_compact_voice_card_hides_volume_and_centers_title(self):
         page = (ROOT / "modules/dashboard/dash/VoiceCall.qml").read_text()
         self.assertNotIn("VoiceVolume {", page)
-        self.assertIn('text: Tr.tr("Vesktop call")', page)
+        self.assertIn('text: Tr.tr("Discord call")', page)
+        self.assertNotIn("Vesktop call", page)
         self.assertIn("horizontalAlignment: Text.AlignHCenter", page)
 
     def test_voice_controls_and_music_action_match_between_views(self):
@@ -129,8 +130,9 @@ class DiscordVoiceMediaTest(unittest.TestCase):
 
     def test_app_volume_is_pipewire_playback_not_discord_person_volume(self):
         volume = (ROOT / "modules/dashboard/media/VoiceVolume.qml").read_text()
-        self.assertIn("Audio.vesktopPlayback", volume)
-        self.assertIn("Audio.setStreamVolume(Audio.vesktopPlayback", volume)
+        self.assertIn("Audio.discordClientPlayback", volume)
+        self.assertIn("Audio.setStreamVolume(Audio.discordClientPlayback", volume)
+        self.assertNotIn("Audio.vesktopPlayback", volume)
         for component in ("modules/dashboard/media/VoiceCall.qml",):
             page = (ROOT / component).read_text()
             self.assertIn("VoiceVolume {", page)
@@ -165,7 +167,7 @@ class DiscordVoiceMediaTest(unittest.TestCase):
         volume = (ROOT / "modules/dashboard/media/VoiceVolume.qml").read_text()
         self.assertIn("FilledSlider {", volume)
         self.assertIn('text: Tr.tr("App")', volume)
-        self.assertIn("onMoved: Audio.setStreamVolume(Audio.vesktopPlayback, value)", volume)
+        self.assertIn("onMoved: Audio.setStreamVolume(Audio.discordClientPlayback, value)", volume)
         self.assertNotIn("onWheel:", volume)
         for component in ("modules/dashboard/media/VoiceCall.qml",):
             page = (ROOT / component).read_text()

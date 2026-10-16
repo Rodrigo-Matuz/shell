@@ -20,7 +20,7 @@ The fork keeps the upstream shell architecture and adds or maintains:
 - Explicit OBS controls for the forked Caelestia CLI, including recording status, start/stop/pause controls, recording paths, and safe recording-list handling.
 - Muted looping video wallpapers with still thumbnails, picker/gallery integration, per-screen playback suspension, and fullscreen/game-mode handling. Videos are discovered in `~/Pictures/Live-Wallpapers`; set `CAELESTIA_LIVE_WALLPAPERS_DIR` to use another directory.
 - The vendored [Caelestia Notes](https://denzils-repo.github.io/Caelestia_Notes/) dashboard tab. Its upstream GPL-3.0 license is included at [`config/CAELESTIA_NOTES_LICENSE`](config/CAELESTIA_NOTES_LICENSE).
-- An opt-in Vesktop/Vencord integration that exposes active Discord voice calls in the dashboard. See [CaelestiaVoice](#caelestiavoice-for-vesktop) below.
+- An opt-in Discord-client/Vencord integration that exposes active Discord voice calls in the dashboard. See [CaelestiaVoice](#caelestiavoice-for-vesktop-and-equibop) below.
 
 The shell and [the matching CLI fork](https://github.com/Rodrigo-Matuz/cli) are intended to be used together. The CLI has its own installation and configuration.
 
@@ -64,16 +64,18 @@ sudo nixos-rebuild switch --flake .#<host>
 
 A build does not change the running shell. Restart the user service or log in again after activation if the current session does not pick up the new generation.
 
-## CaelestiaVoice for Vesktop
+## CaelestiaVoice for Vesktop and Equibop
 
 ### What it does
 
-`CaelestiaVoice` is a Vencord userplugin bundled into a custom Vesktop package by an opt-in Home Manager module. It connects the running Vesktop client to Caelestia through a small local Unix socket:
+`CaelestiaVoice` is a Vencord userplugin shared by Vesktop and Equibop/Equicord builds. It connects the running Discord-compatible client to Caelestia through a small local Unix socket:
 
 1. Vencord observes the active Discord voice state.
 2. The plugin validates and publishes a bounded JSON snapshot.
-3. Caelestia reads the snapshot from `$XDG_RUNTIME_DIR/caelestia-voice/vesktop-voice.sock`.
+3. Caelestia reads the snapshot from `$XDG_RUNTIME_DIR/caelestia-voice/discord-voice.sock`.
 4. The full and compact dashboard media views switch from the MPRIS player view to a voice-call view when a call is active.
+
+The shared socket name is intentionally client-neutral. After updating, fully restart the Discord client and the Caelestia user service so both sides use the new protocol endpoint.
 
 The call view can show:
 
@@ -81,13 +83,13 @@ The call view can show:
 - The current channel or call name.
 - A bounded participant roster with avatars and speaking, mute, deafen, and local-volume state.
 - The local user's mute and deafen state.
-- Guarded self mute/deafen controls and participant volume controls when the loaded Vesktop build exposes the expected actions and readback succeeds.
-- A separate Vesktop application-volume slider backed by PipeWire. This changes Vesktop's output stream volume, not a participant's Discord volume.
+- Guarded self mute/deafen controls and participant volume controls when the loaded Discord client exposes the expected actions and readback succeeds.
+- A separate Discord-client application-volume slider backed by PipeWire. It selects Vesktop or Equibop output streams and changes the client's output volume, not a participant's Discord volume.
 - A return path to the normal MPRIS music view, so music playback remains available when it shares the dashboard with a call.
 
 The bridge does not use Discord tokens, self-bots, bots, or the arRPC Rich Presence socket. The socket directory is created with mode `0700` and the socket with mode `0600`; snapshots are validated and bounded before the shell consumes them.
 
-The feature is opt-in. Installing Caelestia Shell alone does not install Vesktop, build Vencord, or enable the plugin.
+The feature is opt-in. Installing Caelestia Shell alone does not install Vesktop or Equibop, build Vencord/Equicord, or enable the plugin.
 
 ### Enable it in Home Manager
 
@@ -100,7 +102,7 @@ home-manager.users.<user>.imports = [
 ];
 ```
 
-The Vesktop module enables `programs.vesktop`, builds Vencord from the pinned nixpkgs package, copies the canonical plugin source from [`integrations/vencord/caelestiaVoice`](integrations/vencord/caelestiaVoice) into that build, and overrides Vesktop to load the resulting Vencord package.
+The plugin source and socket protocol are host-neutral. The exported `homeManagerModules.vesktop-voice` module packages it for Vesktop; the [personal Equibop/Equicord fork](https://github.com/Rodrigo-Matuz/Equibop) embeds the same source through its Nix flake without changing the plugin contract. The shell identifies the client's PipeWire output by Discord-client metadata rather than assuming the application is named Vesktop.
 
 Do not import the named module and the old path import together. These are alternatives:
 
@@ -156,7 +158,7 @@ The detailed module notes and isolated activation checks are in [`integrations/v
 - Home Manager module: [`integrations/vencord/default.nix`](integrations/vencord/default.nix)
 - Shell socket reader: [`services/DiscordVoice.qml`](services/DiscordVoice.qml)
 - Snapshot validation: [`services/DiscordVoiceValidation.js`](services/DiscordVoiceValidation.js)
-- Vesktop PipeWire stream selection: [`services/VesktopStream.js`](services/VesktopStream.js)
+- Discord-client PipeWire stream selection: [`services/DiscordClientStream.js`](services/DiscordClientStream.js)
 - Full voice dashboard view: [`modules/dashboard/media/VoiceCall.qml`](modules/dashboard/media/VoiceCall.qml)
 - Compact voice dashboard view: [`modules/dashboard/dash/VoiceCall.qml`](modules/dashboard/dash/VoiceCall.qml)
 
@@ -184,7 +186,7 @@ nix flake check --no-write-lock-file
 nix build .#default --no-link --no-write-lock-file
 ```
 
-Live Discord behavior still depends on the Vesktop and Discord builds loaded on the target machine. Test guild calls, private calls, group calls, reconnects, Vesktop restarts, missing icons, and dashboard controls after updating the consuming flake. Do not treat a Nix build or an offscreen UI test as proof that a graphical call view works in a running session.
+Live Discord behavior still depends on the Vesktop and Equibop/Equicord builds loaded on the target machine. Test guild calls, private calls, group calls, reconnects, client restarts, missing icons, PipeWire application-volume changes, and dashboard controls after updating the consuming flake. Do not treat a Nix build or an offscreen UI test as proof that a graphical call view works in a running session.
 
 ## License and upstream
 

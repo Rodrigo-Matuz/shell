@@ -8,7 +8,7 @@ import Caelestia
 import Caelestia.Config
 import Caelestia.I18n
 import Caelestia.Services
-import "VesktopStream.js" as VesktopStream
+import "DiscordClientStream.js" as DiscordClientStream
 
 Singleton {
     id: root
@@ -19,7 +19,7 @@ Singleton {
     property list<PwNode> sinks: []
     property list<PwNode> sources: []
     property list<PwNode> streams: []
-    readonly property PwNode vesktopPlayback: VesktopStream.findVesktopPlayback(streams)
+    readonly property PwNode discordClientPlayback: DiscordClientStream.findDiscordClientPlayback(streams)
 
     readonly property PwNode sink: Pipewire.defaultAudioSink
     readonly property PwNode source: Pipewire.defaultAudioSource

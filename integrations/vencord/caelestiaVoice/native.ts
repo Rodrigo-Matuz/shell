@@ -16,7 +16,7 @@ async function startBridge() {
     if (!details.isDirectory() || details.uid !== process.getuid?.() || (details.mode & 0o777) !== 0o700) {
         throw new Error("Unsafe Caelestia voice runtime directory");
     }
-    return createVoiceServer(path.join(directory, "vesktop-voice.sock"));
+    return createVoiceServer(path.join(directory, "discord-voice.sock"));
 }
 
 export async function publishSnapshot(_event: IpcMainInvokeEvent, next: unknown) {

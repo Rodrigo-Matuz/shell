@@ -27,7 +27,7 @@ Item {
                 Layout.fillWidth: true
                 StyledText {
                     Layout.fillWidth: true
-                    text: Tr.tr("Vesktop call")
+                    text: Tr.tr("Discord call")
                     color: Colours.light ? Colours.palette.m3primary : Colours.accents.blue
                     font: Tokens.font.title.small
                     horizontalAlignment: Text.AlignHCenter
