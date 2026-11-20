@@ -58,6 +58,12 @@ class DashboardAccentRolesTest(unittest.TestCase):
     def test_system_status_uses_blue_purple_red_and_green_without_repainting_card(self):
         user = source("dash/User.qml")
         self.assertRegex(user, r'source: SysInfo\.osLogo[^}]*colour: Colours\.light \? [^\n]+ : Colours\.accents\.blue')
+        nix_logo = user.split('id: logoShape', 1)[1].split('Behavior on color', 1)[0]
+        self.assertIn('SysInfo.useNixLogo ? Colours.accents.blue', nix_logo)
+        self.assertIn('sourceComponent: SysInfo.useNixLogo ? nixLogo : SysInfo.isDefaultLogo ? caelestiaLogo : osLogo', user)
+        self.assertIn('readonly property bool useNixLogo: osId === "nixos" && !GlobalConfig.general.logo', (DASH.parents[1] / "utils/SysInfo.qml").read_text())
+        self.assertIn('text: ""', user)
+        self.assertIn('color: Colours.accents.whiteForeground', user)
         self.assertIn('color: Colours.light ? Colours.palette.m3primary : Colours.accents.red', user)
         self.assertRegex(user, r'id: wmIcon[^}]*Colours\.accents\.purple')
         self.assertRegex(user, r'id: wmText[^}]*Colours\.accents\.purple')

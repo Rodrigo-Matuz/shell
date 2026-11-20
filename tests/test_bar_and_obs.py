@@ -22,6 +22,10 @@ class BarAndObsTest(unittest.TestCase):
         self.assertIn("topColour: Colours.accents.blue", icon)
         self.assertIn("bottomColour: Colours.accents.blue", icon)
         self.assertIn("colour: Colours.accents.blue", icon)
+        self.assertIn('SysInfo.useNixLogo ? nixLogo : SysInfo.isDefaultLogo ? caelestiaLogo : distroIcon', icon)
+        self.assertIn('text: ""', icon)
+        self.assertIn('color: Colours.accents.blue', icon)
+        self.assertIn('font.pixelSize: Math.round(Tokens.font.body.large.pointSize * 1.6)', icon)
 
     def test_active_workspace_changes_to_a_new_fixed_accent_only_on_switch(self):
         workspaces = self.source("modules/bar/components/workspaces/Workspaces.qml")

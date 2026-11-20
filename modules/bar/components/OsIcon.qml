@@ -8,8 +8,8 @@ import qs.utils
 Item {
     id: root
 
-    implicitWidth: Math.round(Tokens.font.body.large.pointSize * 1.2)
-    implicitHeight: Math.round(Tokens.font.body.large.pointSize * 1.2)
+    implicitWidth: Math.round(Tokens.font.body.large.pointSize * 1.6)
+    implicitHeight: Math.round(Tokens.font.body.large.pointSize * 1.6)
 
     MouseArea {
         anchors.fill: parent
@@ -23,7 +23,7 @@ Item {
     Loader {
         asynchronous: true
         anchors.centerIn: parent
-        sourceComponent: SysInfo.isDefaultLogo ? caelestiaLogo : distroIcon
+        sourceComponent: SysInfo.useNixLogo ? nixLogo : SysInfo.isDefaultLogo ? caelestiaLogo : distroIcon
     }
 
     Component {
@@ -34,6 +34,17 @@ Item {
             implicitHeight: Math.round(Tokens.font.body.large.pointSize * 1.6)
             topColour: Colours.accents.blue
             bottomColour: Colours.accents.blue
+        }
+    }
+
+    Component {
+        id: nixLogo
+
+        Text {
+            text: ""
+            color: Colours.accents.blue
+            font.family: "CaskaydiaCove Nerd Font"
+            font.pixelSize: Math.round(Tokens.font.body.large.pointSize * 1.6)
         }
     }
 

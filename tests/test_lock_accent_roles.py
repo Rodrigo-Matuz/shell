@@ -47,6 +47,9 @@ class LockAccentRolesTest(unittest.TestCase):
         self.assertIn("color: Colours.accents.blue", fetch)
         self.assertIn("color: Colours.accents.blueForeground", fetch)
         self.assertIn("colour: Colours.accents.blue", fetch)
+        self.assertIn('SysInfo.useNixLogo ? nixLogo : SysInfo.isDefaultLogo ? caelestiaLogo : distroLogo', fetch)
+        self.assertIn('text: ""', fetch)
+        self.assertIn('color: Colours.accents.whiteForeground', fetch)
         for role in ("red", "orange", "yellow", "green", "blue", "purple"):
             self.assertIn(f"Colours.accents.{role}", fetch)
         self.assertIn("Colours.palette.m3surfaceContainerLowest", fetch)

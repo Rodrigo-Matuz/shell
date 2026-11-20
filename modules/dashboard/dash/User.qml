@@ -137,8 +137,8 @@ Item {
 
         x: Tokens.padding.extraSmall
         implicitSize: Tokens.sizes.dashboard.logoSize + Tokens.padding.small * 2
-        shape: MaterialShape.Gem
-        color: Colours.palette.m3primaryContainer
+        shape: SysInfo.useNixLogo ? MaterialShape.Pill : MaterialShape.Gem
+        color: SysInfo.useNixLogo ? Colours.accents.blue : Colours.palette.m3primaryContainer
 
         Behavior on color {
             CAnim {}
@@ -146,7 +146,7 @@ Item {
 
         Loader {
             anchors.centerIn: parent
-            sourceComponent: SysInfo.isDefaultLogo ? caelestiaLogo : osLogo
+            sourceComponent: SysInfo.useNixLogo ? nixLogo : SysInfo.isDefaultLogo ? caelestiaLogo : osLogo
         }
     }
 
@@ -159,6 +159,17 @@ Item {
             source: SysInfo.osLogo
             implicitSize: Tokens.sizes.dashboard.logoSize
             colour: Colours.light ? Colours.palette.m3onPrimaryContainer : Colours.accents.blue
+        }
+    }
+
+    Component {
+        id: nixLogo
+
+        Text {
+            text: ""
+            color: Colours.accents.whiteForeground
+            font.family: "CaskaydiaCove Nerd Font"
+            font.pixelSize: Tokens.sizes.dashboard.logoSize
         }
     }
 

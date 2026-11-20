@@ -16,6 +16,7 @@ Singleton {
     property list<string> osIdLike
     property string osLogo: Qt.resolvedUrl(`${Quickshell.shellDir}/assets/logo.svg`)
     property bool isDefaultLogo: true
+    readonly property bool useNixLogo: osId === "nixos" && !GlobalConfig.general.logo
 
     property string uptime
     // Uptime trimmed to its two largest components

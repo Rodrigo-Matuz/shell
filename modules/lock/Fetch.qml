@@ -64,7 +64,7 @@ StyledRect {
                 Layout.preferredHeight: 0
                 active: !iconLoader.active
 
-                sourceComponent: SysInfo.isDefaultLogo ? caelestiaLogo : distroIcon
+                sourceComponent: SysInfo.useNixLogo ? nixLogo : SysInfo.isDefaultLogo ? caelestiaLogo : distroLogo
             }
         }
 
@@ -79,7 +79,7 @@ StyledRect {
                 Layout.fillHeight: true
                 active: root.width > Tokens.sizes.lock.largeLogoWidth
 
-                sourceComponent: SysInfo.isDefaultLogo ? caelestiaLogo : distroIcon
+                sourceComponent: SysInfo.useNixLogo ? nixLogo : SysInfo.isDefaultLogo ? caelestiaLogo : distroLogo
             }
 
             ColumnLayout {
@@ -167,13 +167,32 @@ StyledRect {
     }
 
     Component {
-        id: distroIcon
+        id: distroLogo
 
         ColouredIcon {
             source: SysInfo.osLogo
             implicitSize: height
             colour: Colours.accents.blue
             layer.enabled: Config.lock.recolourLogo
+        }
+    }
+
+    Component {
+        id: nixLogo
+
+        StyledRect {
+            implicitWidth: height
+            implicitHeight: parent.height
+            color: Colours.accents.blue
+            radius: Tokens.rounding.full
+
+            Text {
+                anchors.centerIn: parent
+                text: ""
+                color: Colours.accents.whiteForeground
+                font.family: "CaskaydiaCove Nerd Font"
+                font.pixelSize: parent.height * 0.55
+            }
         }
     }
 
